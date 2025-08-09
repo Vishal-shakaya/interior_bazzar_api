@@ -203,7 +203,7 @@ if(ENV == APPMODE.DEV):
     # RAZORPAY_KEY_SECRET=env("PROD_RAZORPAY_KEY_SECRET")
     
 
-    ALLOWED_HOSTS = ["","*"]
+    ALLOWED_HOSTS = ["*"]
     # CORS_ORIGIN_WHITELIST = [
     #     'https://lawcalldevapi.store',
     # ]
