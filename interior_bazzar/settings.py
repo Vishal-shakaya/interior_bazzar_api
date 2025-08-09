@@ -35,6 +35,7 @@ SECRET_KEY = 'django-insecure-+v0qbypjz*^(5^!7@uosljz@9phfii&=13u3*)0oz802oulfzu
 # Set the environment
 ENV =  APPMODE.DEV
 
+print(f'ENV: {ENV}')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ALLOWED_HOSTS = []
@@ -301,8 +302,7 @@ STATIC_ROOT = BASE_DIR  / 'static_root'
     # Test Locally: http://127.0.0.1:8888/api/test_api/
 
     
-    # python -m uvicorn lawcall.asgi:application
-    # python -m uvicorn lawcall.asgi:application --port 8888 --host 0.0.0.0 
+    # python -m uvicorn interior_bazzar.asgi:application --port 8888 --host 0.0.0.0 
     # http://127.0.0.1:8888/api/test_api/
 
 # async def say_after(delay, what):

@@ -199,3 +199,7 @@ cython_debug/
 
 
 # End of https://www.toptal.com/developers/gitignore/api/django,pythonvanilla
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
