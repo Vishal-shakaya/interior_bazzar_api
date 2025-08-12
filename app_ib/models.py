@@ -1,8 +1,6 @@
 from django.db import models
 from django_quill.fields import QuillField
 
-
-
 # Create your models here.
 class CustomUser(models.Model):
     id= models.UUIDField(default=uuid.uuid4, editable=False)
@@ -32,8 +30,8 @@ class Business(models.Model):
     phone= models.CharField(max_length=250)
     gst= models.CharField(max_length=250)
     since= models.CharField(max_length=250)
+    segment= models.TextField()
     catigory= models.TextField()
-    tag= models.TextField()
     badge= models.TextField()
     timestamp= models.DateTimeField(auto_now_add=True)
 
@@ -119,3 +117,12 @@ class Blog(models.Model):
 
     def __str__(self):
         return f'author {self.author} title:{self.title} timestamp:{self.timestamp}'
+
+class Blog(models.Model):
+    segments= models.TextField() # {'manu':Manugraturer, 'retailer':Retailer}
+    catigory= models.TextField() # {'manu':[furniture,lighting,decor,flooring,wall_coverings,window_treatments,home_textiles,kitchen_cabinets], 'retailer':[bathroom_fixtures,toilets,faucets,sinks,showers,bathtubs,bathroom_accessories,water_systems]}
+
+    def __str__(self):
+        return f'segments:{self.segments}'
+
+
