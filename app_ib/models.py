@@ -1,3 +1,4 @@
+from tkinter import N
 from django.db import models
 from django_quill.fields import QuillField
 
@@ -97,6 +98,18 @@ class LeadQuery(models.Model):
     def __str__(self):
         return f'phone:{self.phone} query:{self.query}'
 
+class LeadQuery(models.Model):
+    user= models.ForeignKey(CustomUser,on_delete=models.CASCADE, null=True, blank=True)
+    email= models.CharField(max_length=500)
+    phone= models.CharField(max_length=500)
+    stage= models.CharField(max_length=500) #{"1":"Lead","2":"Contacted","3":"Followed Up","4":"Closed"}
+    attachment= models.FileField(null=True, blank=True, upload_to='/lead_query/attachment')
+    timestamp= models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'phone:{self.phone} stage:{self.stage}'
+
+
 class Feedback(models.Model):
     user= models.ForeignKey(CustomUser,on_delete=models.CASCADE, null=True, blank=True)
     contact= models.CharField(max_length=500) # lable : Contact detail 
@@ -118,11 +131,26 @@ class Blog(models.Model):
     def __str__(self):
         return f'author {self.author} title:{self.title} timestamp:{self.timestamp}'
 
-class Blog(models.Model):
+class Constants(models.Model):
     segments= models.TextField() # {'manu':Manugraturer, 'retailer':Retailer}
     catigory= models.TextField() # {'manu':[furniture,lighting,decor,flooring,wall_coverings,window_treatments,home_textiles,kitchen_cabinets], 'retailer':[bathroom_fixtures,toilets,faucets,sinks,showers,bathtubs,bathroom_accessories,water_systems]}
-
+    payment_detail = models.TextField()
+    payment_qr = models.FileField(null=True, blank=True ,upload_to='/payment_qr')
     def __str__(self):
-        return f'segments:{self.segments}'
+        return f' pk {self.pk} segments:{self.segments}'
+
+class Banners(models.Model):
+    support_text = models.TextField()
+    title = models.TextField()
+    banner = models.FileField(null=True, blank=True ,upload_to='/banners')
+    is_active = models.BooleanField(default=False)
+    def __str__(self):
+        return f' pk {self.pk} title:{self.title}'
+
+class OfferHeading(models.Model):
+    title = models.TextField()
+    is_active = models.BooleanField(default=False)
+    def __str__(self):
+        return f' pk {self.pk} title:{self.title}'
 
 

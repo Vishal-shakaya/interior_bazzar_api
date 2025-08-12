@@ -48,3 +48,9 @@ class FEEDBACK_STATUS:
     good= "good"
     bad= "bad"
     neutral= "neutral"
+    
+class LEAD_QUERY_STATUS:
+    lead= "lead"
+    contacted= "contacted"
+    followed_up= "followed_up"
+    closed= "closed"
