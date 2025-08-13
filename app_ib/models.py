@@ -1,10 +1,11 @@
 from tkinter import N
+import uuid
 from django.db import models
 from django_quill.fields import QuillField
 
 # Create your models here.
 class CustomUser(models.Model):
-    id= models.UUIDField(default=uuid.uuid4, editable=False)
+    my_id= models.TextField()
     username= models.CharField(max_length=500, unique=True)
     password= models.CharField(max_length=128)
     type= models.CharField(max_length=128)
@@ -16,10 +17,16 @@ class CustomUser(models.Model):
     def __str__(self):
         return f'date: {str(self.timestamp)} username: {self.username}'
 
+    # def save(self, *args, **kwargs):
+    #     if not self.id:
+    #         self.id = str(uuid.uuid4())
+    #     super().save(*args, **kwargs)
+
+
 class UserProfile(models.Model):
     user= models.ForeignKey(CustomUser,on_delete=models.CASCADE, null=True, blank=True)
     name= models.CharField()
-    profile_image= models.FileField(null=True, blank=True, upload_to='/user/profile_image')
+    profile_image= models.FileField(null=True, blank=True, upload_to='user/profile_image')
     timestamp= models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -41,8 +48,8 @@ class Business(models.Model):
 
 class BusinessProfile(models.Model):
     business= models.ForeignKey(Business,on_delete=models.CASCADE, null=True, blank=True)
-    primary_image= models.FileField(null=True, blank=True , upload_to='/business/primary_image')
-    secondary_images= models.FileField(null=True, blank=True, upload_to='/business/secondary_images')
+    primary_image= models.FileField(null=True, blank=True , upload_to='business/primary_image')
+    secondary_images= models.FileField(null=True, blank=True, upload_to='business/secondary_images')
     about= models.TextField()
     youtube_link= models.TextField()
 
@@ -85,25 +92,25 @@ class Plan(models.Model):
 class LeadQuery(models.Model):
     business= models.ForeignKey(Business,on_delete=models.CASCADE, null=True, blank=True)
     user= models.ForeignKey(CustomUser,on_delete=models.CASCADE, null=True, blank=True)
-    name= models.CharField(max_length=500)
-    email= models.CharField(max_length=500)
-    phone= models.CharField(max_length=500)
-    state= models.CharField(max_length=500)
-    city= models.CharField(max_length=500)
-    country= models.CharField(max_length=500)
-    query= models.TextField()
-    status= models.TextField()
+    name= models.CharField(max_length=500,default='')
+    email= models.CharField(max_length=500,default='')
+    phone= models.CharField(max_length=500,default='')
+    state= models.CharField(max_length=500,default='')
+    city= models.CharField(max_length=500,default='')
+    country= models.CharField(max_length=500,default='')
+    query= models.TextField(default='')
+    status= models.TextField(default='')
     timestamp= models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'phone:{self.phone} query:{self.query}'
 
-class LeadQuery(models.Model):
+class PlanQuery(models.Model):
     user= models.ForeignKey(CustomUser,on_delete=models.CASCADE, null=True, blank=True)
-    email= models.CharField(max_length=500)
-    phone= models.CharField(max_length=500)
-    stage= models.CharField(max_length=500) #{"1":"Lead","2":"Contacted","3":"Followed Up","4":"Closed"}
-    attachment= models.FileField(null=True, blank=True, upload_to='/lead_query/attachment')
+    email= models.CharField(max_length=500,default='')
+    phone= models.CharField(max_length=500,default='')
+    stage= models.CharField(max_length=500,default='') #{"1":"Lead","2":"Contacted","3":"Followed Up","4":"Closed"}
+    attachment= models.FileField(null=True, blank=True, upload_to='lead_query/attachment')
     timestamp= models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -123,7 +130,7 @@ class Feedback(models.Model):
 class Blog(models.Model):
     user= models.ForeignKey(CustomUser,on_delete=models.CASCADE, null=True, blank=True)
     title= models.TextField() 
-    cover= models.FileField(null=True, blank=True,upload_to='/blog/cover')
+    cover= models.FileField(null=True, blank=True,upload_to='blog/cover')
     description=QuillField(null=True, blank=True)
     author= models.TextField()
     timestamp= models.DateTimeField(auto_now_add=True)
@@ -135,14 +142,14 @@ class Constants(models.Model):
     segments= models.TextField() # {'manu':Manugraturer, 'retailer':Retailer}
     catigory= models.TextField() # {'manu':[furniture,lighting,decor,flooring,wall_coverings,window_treatments,home_textiles,kitchen_cabinets], 'retailer':[bathroom_fixtures,toilets,faucets,sinks,showers,bathtubs,bathroom_accessories,water_systems]}
     payment_detail = models.TextField()
-    payment_qr = models.FileField(null=True, blank=True ,upload_to='/payment_qr')
+    payment_qr = models.FileField(null=True, blank=True ,upload_to='payment_qr')
     def __str__(self):
         return f' pk {self.pk} segments:{self.segments}'
 
 class Banners(models.Model):
     support_text = models.TextField()
     title = models.TextField()
-    banner = models.FileField(null=True, blank=True ,upload_to='/banners')
+    banner = models.FileField(null=True, blank=True ,upload_to='banners')
     is_active = models.BooleanField(default=False)
     def __str__(self):
         return f' pk {self.pk} title:{self.title}'

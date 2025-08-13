@@ -1,14 +1,20 @@
-class RESPONSE_MESSAGES: 
-    success= 'success'
-    warning= 'warning'
-    error= 'error'
+class RESPONSE_MESSAGES:
+    success= True
+    warning= False
+    error= False
+
+    default_success= 'success'
+    default_warning= 'warning'
+    default_error= 'error'
 
     update_success= 'Updated successfully'
     input_error= 'Unable to read input'
     validate_error = 'Unable to validate input'	
 
     # AUTH
+    user_exist= 'User already exist'
     user_register_success= 'Register successfully'
+    user_register_error= 'Unable to register'
     user_removed_success= 'User removed successfully'
 
     invalid_mail= 'Invalid mail address'

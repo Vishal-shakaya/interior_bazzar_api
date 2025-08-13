@@ -19,7 +19,11 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
+from app_ib.views import TestView
+
+
 urlpatterns = [
+    path('',TestView, name='root'),
     path('admin/', admin.site.urls),
     path('api/', include("app_ib.urls", namespace='interior_bazzar_api'), name='api'),
 ]
