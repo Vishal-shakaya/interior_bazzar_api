@@ -1,0 +1,53 @@
+from app_ib.serializers import MyTokenObtainPairSerializer
+from adrf.views import sync_to_async
+from app_ib.models import CustomUser
+
+class AUTH_TASK:
+    @classmethod
+    async def IsUserExist(self, username):
+        try:
+            """Check if user exists in database"""
+            is_user_exist = await sync_to_async(CustomUser.objects.filter(username=username).exists)()
+            return is_user_exist
+        except Exception as e:
+            print(f'Error in IsUserExist {e}')
+            return None
+        
+    @classmethod
+    async def CreateUser(self, username, password, type):
+        try:
+            """Create user in database"""
+            user_ins = CustomUser()
+            user_ins.username= username
+            user_ins.password= password
+            user_ins.type= type
+            user_ins.is_active= True
+            user_ins.is_delete= False
+            await sync_to_async(user_ins.save)()
+            return user_ins
+        except Exception as e:
+            print(f'Error in CreateUser {e}')
+            return None
+
+    @classmethod
+    async def GenerateUserToken(self, user_ins):
+        try:
+            """Generate user token"""
+            token = await MyTokenObtainPairSerializer.get_token(user=user_ins)
+            access_token = token['access']
+            refresh_token = token['refresh']
+            data = {
+                'access_token':access_token,
+                'refresh_token':refresh_token,
+                'user_type':user_ins.type,
+                'user_id':user_ins.id,
+                'username':user_ins.username,
+                'is_active':user_ins.is_active,
+                'is_delete':user_ins.is_delete,
+                'unique_id':user_ins.unique_id
+
+            }
+            return data
+        except Exception as e:
+            print(f'Error in GenerateUserToken {e}')
+            return None

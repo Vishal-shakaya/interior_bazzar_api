@@ -1,0 +1,57 @@
+from ast import Try
+from app_ib.Utils.ResponseMessages import RESPONSE_MESSAGES
+from app_ib.Utils.ResponseCodes import RESPONSE_CODES
+from app_ib.Utils.LocalResponse import LocalResponse
+
+from app_ib.Controllers.Auth.Tasks.AuthTasks import AUTH_TASK
+
+
+
+class AUTH_CONTROLLER:
+    
+    @classmethod 
+    async def SignupUser(self, data):
+        try:
+            response_data = {}
+
+            # Check if user already exist 
+            is_user_exist = await AUTH_TASK.IsUserExist(data.username)
+            if is_user_exist:
+                print(f'is user exist {is_user_exist}')
+                return LocalResponse(
+                    response=RESPONSE_MESSAGES.success,
+                    message=RESPONSE_MESSAGES.user_exist,
+                    code=RESPONSE_CODES.success,
+                    data={})
+            else:
+
+                # Create User
+                user_ins = await AUTH_TASK.CreateUser(data.username, data.password, data.type)
+                print(f'Print username if user created {user_ins.username}')
+
+                if user_ins:
+                    # Generate Token and build final response data
+                    response_data = await AUTH_TASK.GenerateUserToken(user_ins)
+                    print(f'final data {response_data}')
+
+                else:
+                    return LocalResponse(
+                        response=RESPONSE_MESSAGES.error,
+                        message=RESPONSE_MESSAGES.token_generate_error,
+                        code=RESPONSE_CODES.error,
+                        data={})
+                
+                # Success Response: 
+                return LocalResponse(
+                    response=RESPONSE_MESSAGES.success,
+                    message=RESPONSE_MESSAGES.user_register_success,
+                    code=RESPONSE_CODES.success,
+                    data=response_data)
+
+        except:
+            return LocalResponse(
+                response=RESPONSE_MESSAGES.error,
+                message=RESPONSE_MESSAGES.user_register_error,
+                code=RESPONSE_CODES.error,
+                data={})
+
