@@ -10,6 +10,7 @@ from app_ib.Controllers.Auth.AuthController import AUTH_CONTROLLER
 from app_ib.Utils.ServerResponse import ServerResponse
 from app_ib.Utils.ResponseMessages import RESPONSE_MESSAGES
 from app_ib.Utils.ResponseCodes import RESPONSE_CODES
+from app_ib.Controllers.Auth.Validators.AuthValidators import AUTH_VALIDATOR
 
 
 @api_view(['POST'])
@@ -17,25 +18,19 @@ async def SignupView(request):
     try:
         # Convert request.data to dot notation object
         data = MY_METHODS.json_to_object(request.data)
-        
-        # Test
-        # print(f'user {data.username}')
-        # print(f'password {data.password}')
-        # print(f'type {data.type}')
-        
+
         # Call Auth Controller to Create User
         auth_resp = await  asyncio.gather(AUTH_CONTROLLER.SignupUser(data=data))
         auth_resp = auth_resp[0]
-        # print(f'auth_resp {auth_resp.data}')
 
         return ServerResponse(
-            response=RESPONSE_MESSAGES.success,
-            message=RESPONSE_MESSAGES.user_register_success,
-            code=RESPONSE_CODES.success,
+            response=auth_resp.response,
+            code=auth_resp.code,
+            message=auth_resp.message,
             data=auth_resp.data)
 
     except Exception as e:
-        print(f'Error: {e}')
+        # print(f'Error: {e}')
         return ServerResponse(
             response=RESPONSE_MESSAGES.error,
             message=RESPONSE_MESSAGES.user_register_error,
