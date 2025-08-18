@@ -35,6 +35,7 @@ class RESPONSE_MESSAGES:
     ############################################
     #Business
     ############################################
+    business_register_success= 'Business registered successfully'
     business_register_error= 'Unable to register business'
     business_update_success = 'Update successfully'
     business_update_error = 'Unable to update business'

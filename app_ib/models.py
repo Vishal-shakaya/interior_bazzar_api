@@ -56,8 +56,8 @@ class Business(models.Model):
     phone= models.CharField(max_length=250)
     gst= models.CharField(max_length=250)
     since= models.CharField(max_length=250)
-    segment= models.TextField()
-    catigory= models.TextField()
+    segment= models.TextField() # "manufraturer"
+    catigory= models.TextField() # ["interior", "exterior","office"]
     badge= models.TextField()
     timestamp= models.DateTimeField(auto_now_add=True)
 
