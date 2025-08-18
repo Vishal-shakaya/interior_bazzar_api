@@ -18,10 +18,10 @@ urlpatterns = [
     path('v-1/signup', AuthView.SignupView, name='SignupView'),
     path('v-1/login', AuthView.LoginView, name='LoginView'),
     path('v-1/logout', AuthView.LogoutView, name='LogoutView'),
-    path('v-1/forgot_password_request', AuthView.ForgotPasswordRequestView, name='ForgotPasswordRequestView'),
-    path('v-1/forgot-password', AuthView.ForgotPasswordView, name='ForgotPasswordView'),
-    path('v-1/password-reset', AuthView.PasswordResetView, name='PasswordResetView'),
     path('v-1/delete-account', AuthView.DeleteAccountView, name='DeleteAccountView'),  
+    path('v-1/forgot_password_request', AuthView.ForgotPasswordRequestView, name='ForgotPasswordRequestView'),
+    path('v-1/forgot-password/<str:hash>', AuthView.ForgotPasswordView, name='ForgotPasswordView'),
+    path('v-1/password-reset', AuthView.PasswordResetView, name='PasswordResetView'),
     
     #########################################################
     # Tokem: 

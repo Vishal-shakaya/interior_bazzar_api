@@ -11,8 +11,11 @@ from app_ib.Utils.ServerResponse import ServerResponse
 from app_ib.Utils.ResponseMessages import RESPONSE_MESSAGES
 from app_ib.Utils.ResponseCodes import RESPONSE_CODES
 from app_ib.Controllers.Auth.Validators.AuthValidators import AUTH_VALIDATOR
-
-
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import  permission_classes
+######################################
+# Login View
+######################################
 @api_view(['POST'])
 async def SignupView(request):
     try:
@@ -39,33 +42,136 @@ async def SignupView(request):
                 'error': str(e)
             })
 
-
-
+######################################
+# Login View
+######################################
 @api_view(['POST'])
 async def LoginView(request):
     try:
-        return JsonResponse({"result": 'success'})
+        # Convert request.data to dot notation object
+        data = MY_METHODS.json_to_object(request.data)
+
+        # Call Auth Controller to Create User
+        auth_resp = await  asyncio.gather(AUTH_CONTROLLER.LoginUser(data=data))
+        auth_resp = auth_resp[0]
+
+        return ServerResponse(
+            response=auth_resp.response,
+            code=auth_resp.code,
+            message=auth_resp.message,
+            data=auth_resp.data)
+
     except Exception as e:
-        print(f'Error: {e}')
-        return JsonResponse({"result": 'error'})
+        # print(f'Error: {e}')
+        return ServerResponse(
+            response=RESPONSE_MESSAGES.error,
+            message=RESPONSE_MESSAGES.user_login_error,
+            code=RESPONSE_CODES.error,
+            data={
+                'error': str(e)
+            })
 
-
+######################################
+# Logout View
+######################################
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 async def LogoutView(request):
     try:
-        return JsonResponse({"result": 'success'})
-    except Exception as e:
-        print(f'{e}')
-        return JsonResponse({"result": 'error'})
+        user_ins = request.user
+        print(f'user_ins',user_ins)
 
+        # Call Auth Controller to Create User
+        auth_resp = await  asyncio.gather(AUTH_CONTROLLER.LogoutUser(user_ins=user_ins))
+        auth_resp = auth_resp[0]
+
+        return ServerResponse(
+            response=auth_resp.response,
+            code=auth_resp.code,
+            message=auth_resp.message,
+            data=auth_resp.data)
+
+    except Exception as e:
+        # print(f'Error: {e}')
+        return ServerResponse(
+            response=RESPONSE_MESSAGES.error,
+            message=RESPONSE_MESSAGES.user_login_error,
+            code=RESPONSE_CODES.error,
+            data={
+                'error': str(e)
+            })
+
+######################################
+# Delete Account View
+######################################
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+async def DeleteAccountView(request):
+    try:
+        user_ins = request.user
+        print(f'user_ins',user_ins)
+
+        # Call Auth Controller to Create User
+        auth_resp = await  asyncio.gather(AUTH_CONTROLLER.DeleteUser(user_ins=user_ins))
+        auth_resp = auth_resp[0]
+
+        return ServerResponse(
+            response=auth_resp.response,
+            code=auth_resp.code,
+            message=auth_resp.message,
+            data=auth_resp.data)
+
+    except Exception as e:
+        # print(f'Error: {e}')
+        return ServerResponse(
+            response=RESPONSE_MESSAGES.error,
+            message=RESPONSE_MESSAGES.user_login_error,
+            code=RESPONSE_CODES.error,
+            data={
+                'error': str(e)
+            })
+
+######################################
+# Send forgot password link to mail
+######################################
+@api_view(['POST'])
 async def ForgotPasswordRequestView(request):
     try:
-        return JsonResponse({"result": 'success'})
+        # Convert request.data to dot notation object
+        data = MY_METHODS.json_to_object(request.data)
+
+        # Call Auth Controller to Create User
+        auth_resp = await  asyncio.gather(AUTH_CONTROLLER.GenerateAndSendForgotPasswordLink(data=data))
+        auth_resp = auth_resp[0]
+
+        return ServerResponse(
+            response=auth_resp.response,
+            code=auth_resp.code,
+            message=auth_resp.message,
+            data=auth_resp.data)
+
     except Exception as e:
-        print(f'{e}')
-        return JsonResponse({"result": 'error'})
+        # print(f'Error: {e}')
+        return ServerResponse(
+            response=RESPONSE_MESSAGES.error,
+            message=RESPONSE_MESSAGES.user_login_error,
+            code=RESPONSE_CODES.error,
+            data={
+                'error': str(e)
+            })
+
+
 
 async def ForgotPasswordView(request):
     try:
+        # Convert request.data to dot notation object
+        data = MY_METHODS.json_to_object(request.data)
+        print(f'data {data}')
+
+        # # Call Auth Controller to Create User
+        # auth_resp = await  asyncio.gather(AUTH_CONTROLLER.ResetPassword(data=data))
+        # auth_resp = auth_resp[0]
+
         return JsonResponse({"result": 'success'})
     except Exception as e:
         print(f'{e}')
@@ -78,12 +184,6 @@ async def PasswordResetView(request):
         print(f'{e}')
         return JsonResponse({"result": 'error'})
 
-async def DeleteAccountView(request):
-    try:
-        return JsonResponse({"result": 'success'})
-    except Exception as e:
-        print(f'{e}')
-        return JsonResponse({"result": 'error'})
 
 
 

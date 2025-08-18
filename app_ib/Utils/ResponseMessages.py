@@ -13,11 +13,18 @@ class RESPONSE_MESSAGES:
 
     # AUTH
     user_exist= 'User already exist'
+    user_not_exist= 'User not exist'
     user_register_success= 'Register successfully'
     user_register_error= 'Unable to register'
-    user_removed_success= 'User removed successfully'
     token_generate_error = "Unable to generate token"
     token_generate_success = "Token generated successfully"
+    user_login_success= 'Login successfully'
+    user_login_error= 'Unable to login'
+    user_logout_success= 'Logout successfully'
+    user_logout_error= 'Unable to logout'
+    
+    user_remove_error= 'Unable to remove user'
+    user_removed_success= 'User removed successfully'
 
     invalid_mail= 'Invalid mail address'
     invalid_password= 'Invalid password'
