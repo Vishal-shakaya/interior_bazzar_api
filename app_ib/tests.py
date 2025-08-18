@@ -1,9 +1,14 @@
 from ib_app.settings import EMAIL_HOST_USER
-
+import httpx
+import asyncio
+from django.http import JsonResponse
+from asgiref.sync import sync_to_async
+from adrf.decorators import api_view
 from django.test import TestCase
 
 # Create your tests here.
-def TestMailView():
+@api_view(['POST'])
+async def TestMailView():
     try:
         send_mail(
             subject='Test Subject',

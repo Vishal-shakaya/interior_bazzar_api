@@ -5,7 +5,7 @@ from django.conf import settings
 from app_ib import views
 from rest_framework_simplejwt.views import (TokenRefreshView)
 from app_ib.Views import AuthView, BusinessView, QueryView, Feedback
-from interior_bazzar_api.app_ib.tests import TestMailView 
+
 
 app_name = 'interior_bazzar'
 urlpatterns = [
@@ -13,7 +13,7 @@ urlpatterns = [
     # Test: 
     #########################################################
     path('test', views.TestView, name='TestView'),
-    path('test-mail', TestMailView, name='TestMailView'),
+    path('test-mail', views.TestMailView, name='TestMailView'),
     #########################################################
     # Authentication: 
     #########################################################
@@ -29,7 +29,7 @@ urlpatterns = [
     # Tokem: 
     #########################################################
     path('v-1/get-refresh-token', TokenRefreshView.as_view(), name='token-refresh'),
-    
+
     #########################################################
     # Business: 
     #########################################################
