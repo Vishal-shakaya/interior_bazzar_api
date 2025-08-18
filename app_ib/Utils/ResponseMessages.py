@@ -29,7 +29,7 @@ class RESPONSE_MESSAGES:
     send_link_error= 'Unable to send link'
 
     password_reset_success= 'Password reset successfully'
-    password_reset_fail= 'Unable to reset password'
+    password_reset_error= 'Unable to reset password'
     user_removed_success= 'User removed successfully'
 
     ############################################

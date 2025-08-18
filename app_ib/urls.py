@@ -26,7 +26,7 @@ urlpatterns = [
     #########################################################
     # Tokem: 
     #########################################################
-    path('v-1/get-refresh-token/', TokenRefreshView.as_view(), name='token-refresh'),
+    path('v-1/get-refresh-token', TokenRefreshView.as_view(), name='token-refresh'),
     #########################################################
     # Business: 
     #########################################################

@@ -11,7 +11,8 @@ from app_ib.Utils.ServerResponse import ServerResponse
 from app_ib.Utils.ResponseMessages import RESPONSE_MESSAGES
 from app_ib.Utils.ResponseCodes import RESPONSE_CODES
 from app_ib.Controllers.Auth.Validators.AuthValidators import AUTH_VALIDATOR
-
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 @api_view(['POST'])
 async def SignupView(request):
@@ -21,6 +22,35 @@ async def SignupView(request):
 
         # Call Auth Controller to Create User
         auth_resp = await  asyncio.gather(AUTH_CONTROLLER.SignupUser(data=data))
+        auth_resp = auth_resp[0]
+
+        return ServerResponse(
+            response=auth_resp.response,
+            code=auth_resp.code,
+            message=auth_resp.message,
+            data=auth_resp.data)
+
+    except Exception as e:
+        # print(f'Error: {e}')
+        return ServerResponse(
+            response=RESPONSE_MESSAGES.error,
+            message=RESPONSE_MESSAGES.user_register_error,
+            code=RESPONSE_CODES.error,
+            data={
+                'error': str(e)
+            })
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+async def PasswordResetView(request):
+    try:
+        # Convert request.data to dot notation object
+        data = MY_METHODS.json_to_object(request.data)
+        user_ins = request.user
+        
+        # Call Auth Controller to Create User
+        auth_resp = await  asyncio.gather(AUTH_CONTROLLER.ResetPassword(user_ins=user_ins, data=data))
         auth_resp = auth_resp[0]
 
         return ServerResponse(

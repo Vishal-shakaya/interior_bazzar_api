@@ -51,3 +51,19 @@ class AUTH_TASK:
         except Exception as e:
             print(f'Error in GenerateUserToken {e}')
             return None
+
+    @classmethod
+    async def ResetPassword(self, user_ins, data):
+        try:
+            """Reset user password"""
+            print(f'db old passwod {user_ins.password} , old passwod{data.old_password}')
+            if(user_ins.password==data.old_password):
+                user_ins.password = data.password
+                await sync_to_async(user_ins.save)()
+                print(f'updated password {user_ins.password}')
+                return True
+            else:
+                return False
+        except Exception as e:
+            print(f'Error in ResetPassword {e}')
+            return None

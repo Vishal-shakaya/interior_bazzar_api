@@ -65,3 +65,38 @@ class AUTH_CONTROLLER:
                 code=RESPONSE_CODES.error,
                 data={})
 
+    @classmethod
+    async def ResetPassword(self, user_ins, data):
+        try:
+            # Validate Password
+            validate_password = await AUTH_VALIDATOR._validate_password(password=data.password)
+            print(f'validate_password')
+            if validate_password.code == RESPONSE_CODES.error:
+                return LocalResponse(
+                    code=RESPONSE_CODES.error,
+                    response=RESPONSE_MESSAGES.error,
+                    message=validate_password.message,
+                    data={})
+            
+            # Reset Password
+            is_password_reset = await AUTH_TASK.ResetPassword(user_ins=user_ins, data=data)
+            if is_password_reset:
+                return LocalResponse(
+                    response=RESPONSE_MESSAGES.success,
+                    message=RESPONSE_MESSAGES.password_reset_success,
+                    code=RESPONSE_CODES.success,
+                    data={})
+            else:
+                return LocalResponse(
+                    response=RESPONSE_MESSAGES.error,
+                    message=RESPONSE_MESSAGES.password_reset_error,
+                    code=RESPONSE_CODES.error,
+                    data={})
+
+        except:
+            return LocalResponse(
+                response=RESPONSE_MESSAGES.error,
+                message=RESPONSE_MESSAGES.password_reset_error,
+                code=RESPONSE_CODES.error,
+                data={})
+
