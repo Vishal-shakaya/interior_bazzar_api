@@ -1,7 +1,15 @@
 from ast import Pass
+import time
 from types import SimpleNamespace
 import json
 class MY_METHODS:
+    @staticmethod
+    def GetCurrentTimeinStr():
+        return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+
+    @staticmethod
+    def GetCurrentTimeinInt():
+        return int(time.time())
     
     @staticmethod
     def json_to_object(json_data):

@@ -1,6 +1,9 @@
+import hashlib
+import json
 from app_ib.serializers import MyTokenObtainPairSerializer
 from adrf.views import sync_to_async
 from app_ib.models import CustomUser
+from app_ib.Utils.AppMode import APPMODE_URL
 
 class AUTH_TASK:
     @classmethod
@@ -8,6 +11,16 @@ class AUTH_TASK:
         try:
             """Check if user exists in database"""
             is_user_exist = await sync_to_async(CustomUser.objects.filter(username=username).exists)()
+            return is_user_exist
+        except Exception as e:
+            print(f'Error in IsUserExist {e}')
+            return None
+
+    @classmethod
+    async def IsUserExistByMail(self, email):
+        try:
+            """Check if user exists in database"""
+            is_user_exist = await sync_to_async(CustomUser.objects.filter(email=email).exists)()
             return is_user_exist
         except Exception as e:
             print(f'Error in IsUserExist {e}')
