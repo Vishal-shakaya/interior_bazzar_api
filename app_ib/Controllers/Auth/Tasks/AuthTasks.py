@@ -66,6 +66,52 @@ class AUTH_TASK:
             return None
 
     @classmethod
+    async def LoginUser(self, username, password):
+        try:
+            """Check if user exists in database"""
+            is_user_exist = await sync_to_async(
+                CustomUser.objects.filter(username=username, password=password).exists)()
+            if is_user_exist:
+                user_ins = await sync_to_async(CustomUser.objects.get)(username=username, password=password)
+                return user_ins
+            return is_user_exist
+        except Exception as e:
+            print(f'Error in IsUserExist {e}')
+            return None
+
+    @classmethod
+    async def LogoutUser(self,user_ins):
+        try:
+            return True
+        except Exception as e:
+            print(f'Error in IsUserExist {e}')
+            return None
+
+    @classmethod
+    async def DeleteUser(self,user_ins):
+        try:
+            user_ins.is_delete= True
+            await sync_to_async(user_ins.save)()
+            return True
+        except Exception as e:
+            return None
+
+    @classmethod
+    async def GenerateForgotPasswordLink(self,username, timestamp):
+        try:
+            json_of_hash = {
+                'username':username,
+                'timestamp':timestamp
+            }
+            json_of_hash = json.dumps(json_of_hash)
+            json_of_hash = hashlib.md5(json_of_hash.encode())
+            json_of_hash = json_of_hash.hexdigest()
+            link = f'{APPMODE_URL.LOC}v-1/forgot-password/{json_of_hash}'
+            return link
+        except Exception as e:
+            return None
+
+    @classmethod
     async def ResetPassword(self, user_ins, data):
         try:
             """Reset user password"""
