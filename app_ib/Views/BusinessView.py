@@ -22,7 +22,7 @@ async def CreateBusinessView(request):
         user_ins = request.user
 
         # Call Auth Controller to Create User
-        auth_resp = await  asyncio.gather(BUSS_CONTROLLER.CreateBusinessController(user_ins=user_ins, data=data))
+        auth_resp = await  asyncio.gather(BUSS_CONTROLLER.CreateBusiness(user_ins=user_ins, data=data))
         print(f'auth_resp {auth_resp}')
         auth_resp = auth_resp[0]
 

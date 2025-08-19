@@ -10,7 +10,8 @@ from app_ib.Controllers.Auth.AuthController import AUTH_CONTROLLER
 from app_ib.Utils.ServerResponse import ServerResponse
 from app_ib.Utils.ResponseMessages import RESPONSE_MESSAGES
 from app_ib.Utils.ResponseCodes import RESPONSE_CODES
-
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 @api_view(['POST'])
 async def SignupView(request):
@@ -179,9 +180,4 @@ async def PasswordResetView(request):
     except Exception as e:
         print(f'{e}')
         return JsonResponse({"result": 'error'})
-
-
-
-
-
 
