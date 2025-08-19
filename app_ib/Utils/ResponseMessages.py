@@ -58,3 +58,9 @@ class RESPONSE_MESSAGES:
     query_assign_errror= 'Unable to assign query'
     query_assign_success= 'Query assigned successfully'
 
+class VALIDATION_MESSAGES:
+    query_name_error = " name is required"
+    query_phone_error = " phone is required"
+    query_interested_error = " interested is required"
+
+

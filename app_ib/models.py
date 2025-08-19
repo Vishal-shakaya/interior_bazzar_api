@@ -117,7 +117,10 @@ class LeadQuery(models.Model):
     city= models.CharField(max_length=500,default='')
     country= models.CharField(max_length=500,default='')
     query= models.TextField(default='')
+    interested= models.TextField(default='')
     status= models.TextField(default='')
+    priority= models.TextField(default='')
+    tag= models.TextField(default='')
     timestamp= models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
