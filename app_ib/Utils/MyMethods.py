@@ -2,6 +2,9 @@ from ast import Pass
 import time
 from types import SimpleNamespace
 import json
+import re
+
+
 class MY_METHODS:
     @staticmethod
     def GetCurrentTimeinStr():
@@ -42,3 +45,28 @@ class MY_METHODS:
                 return item
 
         return json.dumps(convert(obj), default=str, indent=4)
+    
+    @staticmethod
+    def _validate_email(email):
+        """
+        Validates an email address using regex.
+        Returns True if valid, False otherwise.
+        """
+        pattern = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
+        return bool(re.fullmatch(pattern, email))
+
+    @staticmethod
+    def _validate_phone(phone):
+        """
+        Validate phone number against international E.164 format:
+        + followed by 7 to 15 digits, optional spaces allowed.
+        """
+        pattern = r'^\+(?:[0-9] ?){6,14}[0-9]$'
+        return bool(re.match(pattern, phone))
+    
+    @staticmethod
+    def _validate_gst(gst):
+        """Returns True if GSTIN is valid in format, False otherwise."""
+        pattern = r'^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$'
+        return bool(re.match(pattern, gst.upper()))
+
