@@ -4,7 +4,6 @@ import time
 from app_ib.Utils.ResponseMessages import RESPONSE_MESSAGES
 from app_ib.Utils.ResponseCodes import RESPONSE_CODES
 from app_ib.Utils.LocalResponse import LocalResponse
-from app_ib.Controllers.Auth.Tasks.AuthTasks import AUTH_TASK
 from app_ib.Controllers.Auth.Validators.AuthValidators import AUTH_VALIDATOR
 from app_ib.Utils.MyMethods import MY_METHODS
 from app_ib.models import UserProfile
@@ -103,6 +102,40 @@ class PROFILE_CONTROLLER:
             # Update Profile Image if already exist : 
             if is_user_profile_created:
                 user_profile_ins = await sync_to_async(UserProfile.objects.get)(user=user_ins)
+                user_profile_data = {
+                    'name': user_profile_ins.name,
+                    'email': user_profile_ins.email,
+                    'phone': user_profile_ins.phone,
+                    'profile_image': user_profile_ins.profile_image.url,
+                }
+                return LocalResponse(
+                    response=RESPONSE_MESSAGES.success,
+                    message=RESPONSE_MESSAGES.user_profile_fetch_success,
+                    code=RESPONSE_CODES.success,
+                    data=user_profile_data)
+            
+
+        except Exception as e:
+            return LocalResponse(
+                response=RESPONSE_MESSAGES.error,
+                message=RESPONSE_MESSAGES.user_profile_fetch_error,
+                code=RESPONSE_CODES.error,
+                data={
+                    'error': str(e)
+                })
+                
+    @classmethod 
+    async def GetProfileInstanceByUserInstance(self, user_ins):
+        try:
+            print(f'user instance {user_ins}')
+            
+            is_user_profile_created = await sync_to_async(UserProfile.objects.filter(user=user_ins).exists)()
+            print(f'is user profile created {is_user_profile_created}')
+            
+            # Update Profile Image if already exist : 
+            if is_user_profile_created:
+                user_profile_ins = await sync_to_async(UserProfile.objects.get)(user=user_ins)
+                
                 user_profile_data = {
                     'name': user_profile_ins.name,
                     'email': user_profile_ins.email,

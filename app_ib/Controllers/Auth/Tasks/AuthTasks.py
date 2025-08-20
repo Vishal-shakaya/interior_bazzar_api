@@ -131,8 +131,12 @@ class AUTH_TASK:
         try:
             if user_ins:
                 user_profile_ins = await sync_to_async(UserProfile.objects.filter(user=user_ins).first)()
-                print(f'user_profile_ins {user_profile_ins}')
-                return user_profile_ins
+                data = {
+                    'email':user_profile_ins.email,
+                    'phone':user_profile_ins.phone,
+                    'name':user_profile_ins.name,
+                }
+                return data
             else:
                 return False
         except Exception as e:
