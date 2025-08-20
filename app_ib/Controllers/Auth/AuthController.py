@@ -1,4 +1,6 @@
 from ast import Try
+import base64
+import json
 import time
 from app_ib.Utils.ResponseMessages import RESPONSE_MESSAGES
 from app_ib.Utils.ResponseCodes import RESPONSE_CODES
@@ -140,6 +142,7 @@ class AUTH_CONTROLLER:
     @classmethod
     async def GenerateAndSendForgotPasswordLink(self, data):
         try:
+            link = ''
             # Check if user exist
             is_user_exist = await AUTH_TASK.IsUserExist(username=data.username)
             print(f'is user exist {is_user_exist}')
@@ -179,7 +182,9 @@ class AUTH_CONTROLLER:
                 response=RESPONSE_MESSAGES.success,
                 message=RESPONSE_MESSAGES.send_link_success,
                 code=RESPONSE_CODES.success,
-                data={})
+                data={
+                    'link':link,
+                })
         except:
             return LocalResponse(
                 response=RESPONSE_MESSAGES.error,
@@ -219,5 +224,93 @@ class AUTH_CONTROLLER:
             return LocalResponse(
                 response=RESPONSE_MESSAGES.error,
                 message=RESPONSE_MESSAGES.password_reset_error,
+                code=RESPONSE_CODES.error,
+                data={})
+
+
+
+    @classmethod
+    async def ChanagePassword(self,data):
+        try:
+            if(data.password != data.confirm_password):
+                return LocalResponse(
+                    response=RESPONSE_MESSAGES.error,
+                    message=RESPONSE_MESSAGES.password_not_match,
+                    code=RESPONSE_CODES.error,
+                    data={})
+
+            # Validate Password
+            validate_password = await AUTH_VALIDATOR._validate_password(password=data.password)
+            print(f'validate_password')
+            if validate_password.code == RESPONSE_CODES.error:
+                return LocalResponse(
+                    code=RESPONSE_CODES.error,
+                    response=RESPONSE_MESSAGES.error,
+                    message=validate_password.message,
+                    data={})
+            
+            decoded_json_str = base64.urlsafe_b64decode(data.hash.encode()).decode()
+            decode_hash = json.loads(decoded_json_str)
+            username = decode_hash['username']
+            timestamp = decode_hash['timestamp']
+            time_difference =  MY_METHODS.GetTimeDifferenceInMinutes(my_time=timestamp)
+            print(f'time_difference {time_difference}')
+            
+            if time_difference > 59:
+                is_password_reset = await AUTH_TASK.ChangePassword(username=username, password=data.password)
+                if is_password_reset:
+                    return LocalResponse(
+                        response=RESPONSE_MESSAGES.success,
+                        message=RESPONSE_MESSAGES.password_reset_success,
+                        code=RESPONSE_CODES.success,
+                        data={})
+                else:
+                    return LocalResponse(
+                        response=RESPONSE_MESSAGES.error,
+                        message=RESPONSE_MESSAGES.password_reset_error,
+                        code=RESPONSE_CODES.error,
+                        data={})
+
+        except:
+            return LocalResponse(
+                response=RESPONSE_MESSAGES.error,
+                message=RESPONSE_MESSAGES.password_reset_error,
+                code=RESPONSE_CODES.error,
+                data={})
+
+    @classmethod
+    async def VerifyForgotPasswordLink(self,hash):
+        try:
+            decoded_json_str = base64.urlsafe_b64decode(hash.encode()).decode()
+            decode_hash = json.loads(decoded_json_str)
+            username = decode_hash['username']
+            timestamp = decode_hash['timestamp']
+            # Check if link is expired
+            time_difference =  MY_METHODS.GetTimeDifferenceInMinutes(my_time=timestamp)
+
+            if time_difference > 59:
+                return LocalResponse(
+                    response=RESPONSE_MESSAGES.error,
+                    message=RESPONSE_MESSAGES.link_expired_error,
+                    code=RESPONSE_CODES.error,
+                    data={
+                        'time_difference':time_difference,
+                    })
+
+            data = {
+                'key':hash,
+                'expire_in':time_difference,
+            }
+            return LocalResponse(
+                response=RESPONSE_MESSAGES.success,
+                message=RESPONSE_MESSAGES.default_success,
+                code=RESPONSE_CODES.success,
+                data=data)
+
+        except Exception as e:
+            print(f'Error: {e}')
+            return LocalResponse(
+                response=RESPONSE_MESSAGES.error,
+                message=RESPONSE_MESSAGES.default_error,
                 code=RESPONSE_CODES.error,
                 data={})

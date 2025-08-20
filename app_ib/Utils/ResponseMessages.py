@@ -45,10 +45,16 @@ class RESPONSE_MESSAGES:
 
     send_link_success = 'Link sent successfully'
     send_link_error= 'Unable to send link'
+    link_expired_error= 'Link expired'
+
 
     password_reset_success= 'Password reset successfully'
     password_reset_error= 'Unable to reset password'
     user_removed_success= 'User removed successfully'
+    password_not_match= 'Password not match'
+
+
+
 
     ############################################
     #Business

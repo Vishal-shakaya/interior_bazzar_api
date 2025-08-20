@@ -154,21 +154,54 @@ async def ForgotPasswordRequestView(request):
             })
 
 
+@api_view(['GET'])
+async def ForgotPasswordView(request,hash):
+    try:
+        final_response= await asyncio.gather(AUTH_CONTROLLER.VerifyForgotPasswordLink(hash=hash))
+        final_response = final_response[0]
+        print(f'final_response {final_response}')
+        return ServerResponse(
+            response=final_response.response,
+            code=final_response.code,
+            message=final_response.message,
+            data=final_response.data)
 
-async def ForgotPasswordView(request):
+    except Exception as e:
+        return ServerResponse(
+            response=RESPONSE_MESSAGES.error,
+            message=RESPONSE_MESSAGES.user_login_error,
+            code=RESPONSE_CODES.error,
+            data={
+                'error': str(e)
+            })
+
+@api_view(['POST'])
+async def ChnagePasswordView(request):
     try:
         # Convert request.data to dot notation object
         data = MY_METHODS.json_to_object(request.data)
-        print(f'data {data}')
+        print(f'password',data.password)
+        print(f'confirm',data.confirm_password)
+        print(f'hash',data.hash)
 
-        # # Call Auth Controller to Create User
-        # auth_resp = await  asyncio.gather(AUTH_CONTROLLER.ResetPassword(data=data))
-        # auth_resp = auth_resp[0]
+        # Call Auth Controller to Create User
+        final_response = await  asyncio.gather(AUTH_CONTROLLER.ChanagePassword(data=data))
+        final_response = final_response[0]
 
-        return JsonResponse({"result": 'success'})
+        return ServerResponse(
+            response=final_response.response,
+            code=final_response.code,
+            message=final_response.message,
+            data=final_response.data)
+
     except Exception as e:
-        print(f'{e}')
-        return JsonResponse({"result": 'error'})
+        return ServerResponse(
+            response=RESPONSE_MESSAGES.error,
+            message=RESPONSE_MESSAGES.user_login_error,
+            code=RESPONSE_CODES.error,
+            data={
+                'error': str(e)
+            })
 
 
 async def PasswordResetView(request):

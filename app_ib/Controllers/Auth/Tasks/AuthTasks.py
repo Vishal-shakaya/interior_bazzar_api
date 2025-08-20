@@ -1,3 +1,4 @@
+import base64
 import hashlib
 import json
 
@@ -103,28 +104,27 @@ class AUTH_TASK:
     @classmethod
     async def GenerateForgotPasswordLink(self,username, timestamp):
         try:
-            print(f'env {settings.ENV}')
-
             json_of_hash = {
                 'username':username,
                 'timestamp':timestamp
             }
-            json_of_hash = json.dumps(json_of_hash)
-            json_of_hash = hashlib.md5(json_of_hash.encode())
-            json_of_hash = json_of_hash.hexdigest()
 
+            json_of_hash = json.dumps(json_of_hash)
+            encoded_hash = base64.urlsafe_b64encode(json_of_hash.encode()).decode()
+            
             if(settings.ENV==APPMODE.LOC):
-                link = f'{APPMODE_URL.LOC}v-1/forgot-password/{json_of_hash}'
+                link = f'{APPMODE_URL.LOC}v-1/forgot-password/{encoded_hash}'
 
             if(settings.ENV==APPMODE.DEV):
-                link = f'{APPMODE_URL.DEV}v-1/forgot-password/{json_of_hash}'
+                link = f'{APPMODE_URL.DEV}v-1/forgot-password/{encoded_hash}'
 
             else:
-                link = f'{APPMODE_URL.PRO}v-1/forgot-password/{json_of_hash}'
+                link = f'{APPMODE_URL.PRO}v-1/forgot-password/{encoded_hash}'
 
             return link
         except Exception as e:
             return None
+
 
     @classmethod
     async def GetUserProfileDataByUsername(self,username):
@@ -174,6 +174,19 @@ class AUTH_TASK:
                 return True
             else:
                 return False
+        except Exception as e:
+            print(f'Error in ResetPassword {e}')
+            return None
+
+    async def ChangePassword(self,username , password):
+        try:
+            """Reset user password"""
+            user_ins = await sync_to_async(CustomUser.objects.get)(username=username)
+            user_ins.password = password
+            await sync_to_async(user_ins.save)()
+            print(f'updated password {user_ins.password}')
+            return True
+
         except Exception as e:
             print(f'Error in ResetPassword {e}')
             return None
