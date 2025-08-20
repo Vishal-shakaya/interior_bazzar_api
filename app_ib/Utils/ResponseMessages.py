@@ -9,7 +9,18 @@ class RESPONSE_MESSAGES:
 
     update_success= 'Updated successfully'
     input_error= 'Unable to read input'
-    validate_error = 'Unable to validate input'	
+    validate_error = 'Unable to validate input'
+
+    user_profile_create_success="User profile created successfully" 
+    user_profile_create_error="User profile create error"
+    user_profile_update_success="User profile updated successfully"
+    user_profile_update_error="User profile update error"
+    user_profile_fetch_success="User profile fetched successfully"
+    user_profile_fetch_error="User profile fetch error"
+    user_profile_delete_success="User profile deleted successfully"
+    user_profile_delete_error="User profile delete error"
+
+
 
     # AUTH
     user_exist= 'User already exist'

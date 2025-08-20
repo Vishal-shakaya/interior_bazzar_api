@@ -114,7 +114,6 @@ class AUTH_TASK:
     @classmethod
     async def SendForgotPasswordLink(self,username,link):
         try:
-            
             return True
         except Exception as e:
             return None

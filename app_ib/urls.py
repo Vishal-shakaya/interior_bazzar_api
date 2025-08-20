@@ -5,6 +5,7 @@ from django.conf import settings
 from app_ib import views
 from rest_framework_simplejwt.views import (TokenRefreshView)
 from app_ib.Views import AuthView, BusinessView, QueryView, Feedback
+from app_ib.Views import ProfileView
 
 
 app_name = 'interior_bazzar'
@@ -29,6 +30,15 @@ urlpatterns = [
     # Tokem: 
     #########################################################
     path('v-1/get-refresh-token', TokenRefreshView.as_view(), name='token-refresh'),
+
+    #########################################################
+    # User Profile: 
+    #########################################################
+    path('v-1/create-profile', ProfileView.CreateProfileView, name='CreateProfileView'),
+    path('v-1/create-update-profile-image', ProfileView.CreateOrUpdateProfileImageView, name='CreateOrUpdateProfileImageView'),
+    path('v-1/get-profile', ProfileView.GetProfileView, name='GetProfileView'),
+
+
 
     #########################################################
     # Business: 
