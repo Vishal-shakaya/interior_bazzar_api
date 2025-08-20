@@ -4,6 +4,9 @@ from types import SimpleNamespace
 import json
 import re
 
+from django.conf import settings
+from django.core.mail import send_mail
+
 from app_ib.models import CustomUser
 
 
@@ -71,5 +74,21 @@ class MY_METHODS:
         """Returns True if GSTIN is valid in format, False otherwise."""
         pattern = r'^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$'
         return bool(re.match(pattern, gst.upper()))
+
+
+    @staticmethod
+    def send_email(email, subject, message):
+        """Send email using SMTP"""
+        send_mail(
+            subject=subject,
+            message=message,
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[email],
+        )
+        try:
+            return True
+        except Exception as e:
+            print(f'Error in send_email {e}')
+            return False
     
   

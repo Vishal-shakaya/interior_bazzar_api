@@ -146,39 +146,6 @@ class AUTH_CONTROLLER:
             
             timestamp= MY_METHODS.GetCurrentTimeinStr()
 
-            if is_user_exist:
-                # Generate and send forgot password link
-                link= await AUTH_TASK.GenerateForgotPasswordLink(username=data.username,timestamp=timestamp)
-                if(link):
-                    print(f'link {link}')
-
-                    # Send Email
-                    user_ins= await AUTH_TASK.GetUserProfileInsByUsername(username=data.username)
-                    print(f'user_ins {user_ins}')
-
-                    if(user_ins):
-                        user_profile_ins= await AUTH_TASK.GetUserProfileByUserInstance(user_ins=user_ins)
-                        print(f'user_profile_ins {user_profile_ins}')
-
-                        return LocalResponse(
-                            response=RESPONSE_MESSAGES.success,
-                            message=RESPONSE_MESSAGES.send_link_success,
-                            code=RESPONSE_CODES.success,
-                            data={})
-                    else:
-                        return LocalResponse(
-                            response=RESPONSE_MESSAGES.error,
-                            message=RESPONSE_MESSAGES.send_link_error,
-                            code=RESPONSE_CODES.error,
-                            data={})
-
-                else:
-                    return LocalResponse(
-                        response=RESPONSE_MESSAGES.error,
-                        message=RESPONSE_MESSAGES.generate_link_error,
-                        code=RESPONSE_CODES.error,
-                        data={})
-
             if not is_user_exist:
                 return LocalResponse(
                     response=RESPONSE_MESSAGES.error,
@@ -186,6 +153,26 @@ class AUTH_CONTROLLER:
                     code=RESPONSE_CODES.error,
                     data={})
 
+            if is_user_exist:
+                # Generate and send forgot password link
+                link= await AUTH_TASK.GenerateForgotPasswordLink(username=data.username,timestamp=timestamp)
+                if(link):
+                    print(f'link {link}')
+
+                    # Send Email
+                    user_profile_data= await AUTH_TASK.GetUserProfileDataByUsername(username=data.username)
+                    print(f'user_profile_data {user_profile_data}')
+
+                        # Send Email
+                    if(user_profile_data):
+                        is_email_sent = await AUTH_TASK.SendForgotPasswordEmail(user_profile_data=user_profile_data,link=link)                        
+
+                else:
+                    return LocalResponse(
+                        response=RESPONSE_MESSAGES.error,
+                        message=RESPONSE_MESSAGES.generate_link_error,
+                        code=RESPONSE_CODES.error,
+                        data={})
 
 
             return LocalResponse(

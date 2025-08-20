@@ -1,8 +1,10 @@
 import hashlib
 import json
+
+from interior_bazzar  import settings
 from app_ib.serializers import MyTokenObtainPairSerializer
 from app_ib.models import CustomUser, UserProfile
-from app_ib.Utils.AppMode import APPMODE_URL
+from app_ib.Utils.AppMode import APPMODE, APPMODE_URL
 from app_ib.Utils.MyMethods import MY_METHODS
 from asgiref.sync import sync_to_async
 
@@ -101,6 +103,8 @@ class AUTH_TASK:
     @classmethod
     async def GenerateForgotPasswordLink(self,username, timestamp):
         try:
+            print(f'env {settings.ENV}')
+
             json_of_hash = {
                 'username':username,
                 'timestamp':timestamp
@@ -108,39 +112,53 @@ class AUTH_TASK:
             json_of_hash = json.dumps(json_of_hash)
             json_of_hash = hashlib.md5(json_of_hash.encode())
             json_of_hash = json_of_hash.hexdigest()
-            link = f'{APPMODE_URL.LOC}v-1/forgot-password/{json_of_hash}'
+
+            if(settings.ENV==APPMODE.LOC):
+                link = f'{APPMODE_URL.LOC}v-1/forgot-password/{json_of_hash}'
+
+            if(settings.ENV==APPMODE.DEV):
+                link = f'{APPMODE_URL.DEV}v-1/forgot-password/{json_of_hash}'
+
+            else:
+                link = f'{APPMODE_URL.PRO}v-1/forgot-password/{json_of_hash}'
+
             return link
         except Exception as e:
             return None
 
     @classmethod
-    async def GetUserProfileInsByUsername(self,username):
+    async def GetUserProfileDataByUsername(self,username):
         try:
             is_user_exist = await sync_to_async(CustomUser.objects.filter(username=username).exists)()
             if is_user_exist:
                 user_ins = await sync_to_async(CustomUser.objects.get)(username=username)
-                return user_ins
-            else:
-                return False
-        except Exception as e:
-            print(f'Getting user instance error {e}')
-            return None
-
-    @classmethod
-    async def GetUserProfileByUserInstance(self,user_ins):
-        try:
-            if user_ins:
                 user_profile_ins = await sync_to_async(UserProfile.objects.filter(user=user_ins).first)()
                 data = {
                     'email':user_profile_ins.email,
                     'phone':user_profile_ins.phone,
                     'name':user_profile_ins.name,
                 }
-                return data
+                return data            
             else:
                 return False
         except Exception as e:
-            print(f'Getting user profile instance error {e}')
+            print(f'Getting user instance error {e}')
+            return None
+
+
+    @classmethod
+    async def SendForgotPasswordEmail(self,user_profile_data,link):
+        try:
+            email = user_profile_data['email']
+            MY_METHODS.send_email(
+                email=email,
+                subject='Forgot Password',
+                message=f'Click on the link to reset password {link}'
+            )
+            return True
+
+        except Exception as e:
+            print(f'Error in SendForgotPasswordEmail {e}')
             return None
 
 
