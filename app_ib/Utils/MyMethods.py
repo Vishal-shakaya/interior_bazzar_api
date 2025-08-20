@@ -4,6 +4,8 @@ from types import SimpleNamespace
 import json
 import re
 
+from app_ib.models import CustomUser
+
 
 class MY_METHODS:
     @staticmethod
@@ -69,4 +71,5 @@ class MY_METHODS:
         """Returns True if GSTIN is valid in format, False otherwise."""
         pattern = r'^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$'
         return bool(re.match(pattern, gst.upper()))
-
+    
+  

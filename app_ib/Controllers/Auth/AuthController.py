@@ -153,8 +153,13 @@ class AUTH_CONTROLLER:
                     print(f'link {link}')
 
                     # Send Email
-                    is_link_send= await AUTH_TASK.SendForgotPasswordLink(username=data.username,link=link)
-                    if(is_link_send):
+                    user_ins= await AUTH_TASK.GetUserProfileInsByUsername(username=data.username)
+                    print(f'user_ins {user_ins}')
+
+                    if(user_ins):
+                        user_profile_ins= await AUTH_TASK.GetUserProfileByUserInstance(user_ins=user_ins)
+                        print(f'user_profile_ins {user_profile_ins}')
+
                         return LocalResponse(
                             response=RESPONSE_MESSAGES.success,
                             message=RESPONSE_MESSAGES.send_link_success,

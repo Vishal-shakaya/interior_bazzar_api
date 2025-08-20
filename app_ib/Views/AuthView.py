@@ -1,10 +1,7 @@
-from ast import Try
-import httpx
 import asyncio
 from django.http import JsonResponse
 from asgiref.sync import sync_to_async
 from adrf.decorators import api_view
-from types import SimpleNamespace
 from app_ib.Utils.MyMethods import MY_METHODS
 from app_ib.Controllers.Auth.AuthController import AUTH_CONTROLLER
 from app_ib.Utils.ServerResponse import ServerResponse

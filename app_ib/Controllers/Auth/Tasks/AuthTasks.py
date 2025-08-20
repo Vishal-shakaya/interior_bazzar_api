@@ -1,11 +1,13 @@
 import hashlib
 import json
 from app_ib.serializers import MyTokenObtainPairSerializer
-from adrf.views import sync_to_async
-from app_ib.models import CustomUser
+from app_ib.models import CustomUser, UserProfile
 from app_ib.Utils.AppMode import APPMODE_URL
+from app_ib.Utils.MyMethods import MY_METHODS
+from asgiref.sync import sync_to_async
 
 class AUTH_TASK:
+
     @classmethod
     async def IsUserExist(self, username):
         try:
@@ -112,10 +114,29 @@ class AUTH_TASK:
             return None
 
     @classmethod
-    async def SendForgotPasswordLink(self,username,link):
+    async def GetUserProfileInsByUsername(self,username):
         try:
-            return True
+            is_user_exist = await sync_to_async(CustomUser.objects.filter(username=username).exists)()
+            if is_user_exist:
+                user_ins = await sync_to_async(CustomUser.objects.get)(username=username)
+                return user_ins
+            else:
+                return False
         except Exception as e:
+            print(f'Getting user instance error {e}')
+            return None
+
+    @classmethod
+    async def GetUserProfileByUserInstance(self,user_ins):
+        try:
+            if user_ins:
+                user_profile_ins = await sync_to_async(UserProfile.objects.filter(user=user_ins).first)()
+                print(f'user_profile_ins {user_profile_ins}')
+                return user_profile_ins
+            else:
+                return False
+        except Exception as e:
+            print(f'Getting user profile instance error {e}')
             return None
 
 
