@@ -43,7 +43,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class UserProfile(models.Model):
     user= models.ForeignKey(CustomUser,on_delete=models.CASCADE, null=True, blank=True)
-    name= models.CharField()
+    name= models.CharField(max_length=250,default='',null=True, blank=True)
+
+    phone= models.CharField(max_length=100,default='',null=True, blank=True)
+    email= models.CharField(max_length=250,default='',null=True, blank=True)
     profile_image= models.FileField(null=True, blank=True, upload_to='user/profile_image')
     timestamp= models.DateTimeField(auto_now_add=True)
 
@@ -52,8 +55,8 @@ class UserProfile(models.Model):
 
 class Business(models.Model):
     user= models.ForeignKey(CustomUser,on_delete=models.CASCADE, null=True, blank=True)
-    business_name= models.CharField()
-    phone= models.CharField(max_length=250)
+    business_name= models.CharField(max_length=250)
+    whatsapp= models.CharField(max_length=100,default='',null=True, blank=True)
     gst= models.CharField(max_length=250)
     since= models.CharField(max_length=250)
     segment= models.TextField() # "manufraturer"
