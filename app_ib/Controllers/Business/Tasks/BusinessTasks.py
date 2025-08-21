@@ -39,17 +39,14 @@ class BUSS_TASK:
             return True
             
         except Exception as e:
-            print(f'Error in CreateBusinessTask {e}')
+            print(f'Error in UpdateBusinessTask {e}')
             return None
+
+
     @classmethod
-    async def GetBusinessInfo(self, business_ins):
+    async def GetBusinessInfo(self,id):
         try:
-            business_ins.business_name=data.business_name
-            business_ins.segment=data.segment
-            business_ins.catigory=data.catigory
-            business_ins.whatsapp=data.whatsapp
-            business_ins.gst=data.gst
-            business_ins.since=data.since
+            business_ins = await sync_to_async(Business.objects.get)(pk=id)
 
             data = {
                 'business_name': business_ins.business_name,
@@ -58,8 +55,7 @@ class BUSS_TASK:
                 'whatsapp': business_ins.whatsapp,
                 'gst': business_ins.gst,
                 'since': business_ins.since,
-                'user': business_ins.user.id,
-                'id': business_ins.id
+                'buss_id': business_ins.id
             }
             return data
             

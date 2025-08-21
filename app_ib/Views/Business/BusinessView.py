@@ -95,17 +95,3 @@ async def GetBusinessByIdView(request,id):
                 'error': str(e)
             })
 
-
-async def GetBusinessByIdView(request,id):
-    try:
-        return JsonResponse({"result": 'success'})
-    except Exception as e:
-        print(f'{e}')
-        return JsonResponse({"result": 'error'})
-
-async def GetAllBusinessView(request):
-    try:
-        return JsonResponse({"result": 'success'})
-    except Exception as e:
-        print(f'{e}')
-        return JsonResponse({"result": 'error'})

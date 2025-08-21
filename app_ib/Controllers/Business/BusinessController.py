@@ -92,10 +92,9 @@ class BUSS_CONTROLLER:
             is_business_exist = await sync_to_async(Business.objects.filter(pk=id).exists)()
 
             if is_business_exist:
-                business_ins = await sync_to_async(Business.objects.get)(pk=id)
-                print(f'business instance {business_ins}')
+                business_data = await BUSS_TASK.GetBusinessInfo(id=id)
+                print(f'business data {business_data}')
 
-                business_data = await BUSS_TASK.GetBusinessInfo(business_ins=business_ins)
                 if business_data is not None:
                     return LocalResponse(
                         response=RESPONSE_MESSAGES.success,

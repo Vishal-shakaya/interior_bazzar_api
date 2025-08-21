@@ -48,7 +48,11 @@ urlpatterns = [
     path('v-1/create-business', BusinessView.CreateBusinessView, name='CreateBusinessView'),
     path('v-1/update-business', BusinessView.UpdateBusinessView, name='UpdateBusinessView'),
     path('v-1/get-business-by-id/<int:id>', BusinessView.GetBusinessByIdView, name='GetBusinessByIdView'),
-    path('v-1/get-all-business', BusinessView.GetAllBusinessView, name='GetAllBusinessView'),
+    
+    #########################################################
+    # Business Location: 
+    #########################################################
+
     #########################################################
     # Query: 
     #########################################################
