@@ -64,7 +64,7 @@ class Business(models.Model):
     timestamp= models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'business name{self.business_name.pk} : GST: {self.gst}'
+        return f'business name{self.business_name} : pk: {self.pk}'
 
 class BusinessProfile(models.Model):
     business= models.ForeignKey(Business,on_delete=models.CASCADE, null=True, blank=True)

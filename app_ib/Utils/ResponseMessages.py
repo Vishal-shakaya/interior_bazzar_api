@@ -66,6 +66,8 @@ class RESPONSE_MESSAGES:
 
     business_fetch_error= 'Unable to fetch business detail'
     business_fetch_success= 'Business detail fetched'
+    business_already_exist = "Business already exist"
+
 
     ############################################
     #Query

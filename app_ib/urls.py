@@ -4,8 +4,9 @@ from django.conf.urls.static import static
 from django.conf import settings
 from app_ib import views
 from rest_framework_simplejwt.views import (TokenRefreshView)
-from app_ib.Views import AuthView, BusinessView, QueryView, Feedback
+from app_ib.Views import AuthView, QueryView, Feedback
 from app_ib.Views import ProfileView
+from app_ib.Views.Business import BusinessView
 
 
 app_name = 'interior_bazzar'

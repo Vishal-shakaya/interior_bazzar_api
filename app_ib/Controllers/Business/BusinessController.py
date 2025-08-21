@@ -2,32 +2,123 @@ from asgiref.sync import sync_to_async
 from adrf.decorators import api_view
 from app_ib.Utils.ResponseMessages import RESPONSE_MESSAGES
 from app_ib.Utils.ResponseCodes import RESPONSE_CODES
-from app_ib.models import Business, CustomUser
 from app_ib.Utils.MyMethods import MY_METHODS
 from app_ib.Utils.LocalResponse import LocalResponse
+from app_ib.Controllers.Business.Tasks.BusinessTasks import BUSS_TASK
+from app_ib.Utils.ResponseMessages import RESPONSE_MESSAGES
+from app_ib.Utils.ResponseCodes import RESPONSE_CODES
+from app_ib.Utils.LocalResponse import LocalResponse
+from app_ib.models import Business
 
 
 class BUSS_CONTROLLER:
     @classmethod
     async def CreateBusiness(self, user_ins, data):
         try:
-            print(f'business user {user_ins}')
-            print(f'business data {data.business_name}')
-            print(f'business data {data.phone}')
-            print(f'business data {data.gst}')
-            print(f'business data {data.since}')
-            print(f'business data {data.segment}')
-            print(f'business data {data.catigory}')   
-            
+            # Check if business already exist
+            is_business_exist = await sync_to_async(Business.objects.filter(user=user_ins).exists)()
+            if is_business_exist:
+                return LocalResponse(
+                    response=RESPONSE_MESSAGES.error,
+                    message=RESPONSE_MESSAGES.business_already_exist,
+                    code=RESPONSE_CODES.error,
+                    data={})
+            # Create business
+            business_ins = await BUSS_TASK.CreateBusinessTask(user_ins=user_ins, data=data)
+            if business_ins is None:
+                return LocalResponse(
+                    response=RESPONSE_MESSAGES.error,
+                    message=RESPONSE_MESSAGES.business_register_error,
+                    code=RESPONSE_CODES.error,
+                    data={})
+
             return LocalResponse(
                 code=RESPONSE_CODES.success,
                 response=RESPONSE_MESSAGES.success,
                 message=RESPONSE_MESSAGES.business_register_success,
                 data={})
+                
         except Exception as e:
             return LocalResponse(
                 response=RESPONSE_MESSAGES.error,
                 message=RESPONSE_MESSAGES.business_register_error,
+                code=RESPONSE_CODES.error,
+                data={
+                    'error': str(e)
+                })
+
+    @classmethod
+    async def UpdateeBusiness(self, user_ins, data):
+        try:
+            # Check if business already exist
+            is_business_exist = await sync_to_async(Business.objects.filter(user=user_ins).exists)()
+
+            if is_business_exist:
+                business_ins = await sync_to_async(Business.objects.get)(user=user_ins)
+                print(f'business instance {business_ins}')
+                
+                business_ins = await BUSS_TASK.UpdateBusinessTask(business_ins=business_ins, data=data)
+                if business_ins is None:
+                    return LocalResponse(
+                        response=RESPONSE_MESSAGES.error,
+                        message=RESPONSE_MESSAGES.business_update_error,
+                        code=RESPONSE_CODES.error,
+                        data={})
+                return LocalResponse(
+                    code=RESPONSE_CODES.success,
+                    response=RESPONSE_MESSAGES.success,
+                    message=RESPONSE_MESSAGES.business_update_success,
+                    data={})
+
+            return LocalResponse(
+                code=RESPONSE_CODES.success,
+                response=RESPONSE_MESSAGES.success,
+                message=RESPONSE_MESSAGES.business_register_success,
+                data={})
+
+        except Exception as e:
+            return LocalResponse(
+                response=RESPONSE_MESSAGES.error,
+                message=RESPONSE_MESSAGES.business_register_error,
+                code=RESPONSE_CODES.error,
+                data={
+                    'error': str(e)
+                })
+
+    @classmethod
+    async def GetBusinessById(self,id):
+        try:
+            # Check if business already exist
+            is_business_exist = await sync_to_async(Business.objects.filter(pk=id).exists)()
+
+            if is_business_exist:
+                business_ins = await sync_to_async(Business.objects.get)(pk=id)
+                print(f'business instance {business_ins}')
+
+                business_data = await BUSS_TASK.GetBusinessInfo(business_ins=business_ins)
+                if business_data is not None:
+                    return LocalResponse(
+                        response=RESPONSE_MESSAGES.success,
+                        message=RESPONSE_MESSAGES.business_fetch_success,
+                        code=RESPONSE_CODES.success,
+                        data=business_data)
+                
+                return LocalResponse(
+                    code=RESPONSE_CODES.success,
+                    response=RESPONSE_MESSAGES.success,
+                    message=RESPONSE_MESSAGES.business_fetch_error,
+                    data={})
+
+            return LocalResponse(
+                code=RESPONSE_CODES.success,
+                response=RESPONSE_MESSAGES.success,
+                message=RESPONSE_MESSAGES.business_fetch_success,
+                data={})
+
+        except Exception as e:
+            return LocalResponse(
+                response=RESPONSE_MESSAGES.error,
+                message=RESPONSE_MESSAGES.business_fetch_error,
                 code=RESPONSE_CODES.error,
                 data={
                     'error': str(e)
