@@ -1,7 +1,6 @@
 import base64
 import hashlib
 import json
-
 from interior_bazzar  import settings
 from app_ib.serializers import MyTokenObtainPairSerializer
 from app_ib.models import CustomUser, UserProfile
@@ -63,7 +62,6 @@ class AUTH_TASK:
                 'is_active':user_ins.is_active,
                 'is_delete':user_ins.is_delete,
                 'unique_id':user_ins.unique_id
-
             }
             return data
         except Exception as e:
@@ -101,6 +99,10 @@ class AUTH_TASK:
         except Exception as e:
             return None
 
+
+    #####################################
+    # Generate Forgot Password Link
+    #####################################
     @classmethod
     async def GenerateForgotPasswordLink(self,username, timestamp):
         try:
@@ -108,7 +110,6 @@ class AUTH_TASK:
                 'username':username,
                 'timestamp':timestamp
             }
-
             json_of_hash = json.dumps(json_of_hash)
             encoded_hash = base64.urlsafe_b64encode(json_of_hash.encode()).decode()
             
@@ -120,16 +121,19 @@ class AUTH_TASK:
 
             else:
                 link = f'{APPMODE_URL.PRO}v-1/forgot-password/{encoded_hash}'
-
             return link
         except Exception as e:
+            print(f'Error in GenerateForgotPasswordLink {e}')
             return None
 
-
+    #####################################
+    # Get User Profile Data By Username
+    #####################################
     @classmethod
     async def GetUserProfileDataByUsername(self,username):
         try:
             is_user_exist = await sync_to_async(CustomUser.objects.filter(username=username).exists)()
+
             if is_user_exist:
                 user_ins = await sync_to_async(CustomUser.objects.get)(username=username)
                 user_profile_ins = await sync_to_async(UserProfile.objects.filter(user=user_ins).first)()
@@ -138,55 +142,73 @@ class AUTH_TASK:
                     'phone':user_profile_ins.phone,
                     'name':user_profile_ins.name,
                 }
-                return data            
+                return data 
+                           
             else:
                 return False
         except Exception as e:
-            print(f'Getting user instance error {e}')
+            print(f'Getting UserProfile instance error {e}')
             return None
 
-
+    #####################################
+    # Send Forgot Password Email
+    #####################################
     @classmethod
     async def SendForgotPasswordEmail(self,user_profile_data,link):
         try:
             email = user_profile_data['email']
-            MY_METHODS.send_email(
+            await sync_to_async(MY_METHODS.send_email)(
                 email=email,
                 subject='Forgot Password',
                 message=f'Click on the link to reset password {link}'
             )
             return True
-
         except Exception as e:
             print(f'Error in SendForgotPasswordEmail {e}')
             return None
-
-
+    
+    ###############################################
+    # Reset Password
+    ###############################################
     @classmethod
     async def ResetPassword(self, user_ins, data):
         try:
-            """Reset user password"""
-            print(f'db old passwod {user_ins.password} , old passwod{data.old_password}')
             if(user_ins.password==data.old_password):
                 user_ins.password = data.password
                 await sync_to_async(user_ins.save)()
-                print(f'updated password {user_ins.password}')
                 return True
             else:
                 return False
+
         except Exception as e:
             print(f'Error in ResetPassword {e}')
             return None
 
-    async def ChangePassword(self,username , password):
+
+    ###############################################
+    # Change Password
+    ###############################################
+    @classmethod
+    async def ChangePassword(self, username, password):
         try:
-            """Reset user password"""
             user_ins = await sync_to_async(CustomUser.objects.get)(username=username)
             user_ins.password = password
             await sync_to_async(user_ins.save)()
-            print(f'updated password {user_ins.password}')
             return True
 
         except Exception as e:
             print(f'Error in ResetPassword {e}')
+            return None
+
+    @classmethod
+    async def DecodeHashAndGetTimeDifference(self,hash):
+        try:
+            decoded_json_str = base64.urlsafe_b64decode(hash.encode()).decode()
+            decode_hash = json.loads(decoded_json_str)
+            username = decode_hash['username']
+            timestamp = decode_hash['timestamp']
+            time_difference =  await sync_to_async(MY_METHODS.GetTimeDifferenceInMinutes)(my_time=timestamp)
+            return time_difference
+        except Exception as e:
+            print(f'Error in DecodeHash {e}')
             return None

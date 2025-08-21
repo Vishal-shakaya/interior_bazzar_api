@@ -10,6 +10,9 @@ from app_ib.Utils.ResponseCodes import RESPONSE_CODES
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 
+######################################
+# Signup View
+######################################
 @api_view(['POST'])
 async def SignupView(request):
     try:
@@ -36,8 +39,9 @@ async def SignupView(request):
                 'error': str(e)
             })
 
-
-
+######################################
+# Login View
+######################################
 @api_view(['POST'])
 async def LoginView(request):
     try:
@@ -45,14 +49,14 @@ async def LoginView(request):
         data = MY_METHODS.json_to_object(request.data)
 
         # Call Auth Controller to Create User
-        auth_resp = await  asyncio.gather(AUTH_CONTROLLER.LoginUser(data=data))
-        auth_resp = auth_resp[0]
+        final_response = await  asyncio.gather(AUTH_CONTROLLER.LoginUser(data=data))
+        final_response = final_response[0]
 
         return ServerResponse(
-            response=auth_resp.response,
-            code=auth_resp.code,
-            message=auth_resp.message,
-            data=auth_resp.data)
+            response=final_response.response,
+            code=final_response.code,
+            message=final_response.message,
+            data=final_response.data)
 
     except Exception as e:
         # print(f'Error: {e}')
@@ -75,14 +79,14 @@ async def LogoutView(request):
         print(f'user_ins',user_ins)
 
         # Call Auth Controller to Create User
-        auth_resp = await  asyncio.gather(AUTH_CONTROLLER.LogoutUser(user_ins=user_ins))
-        auth_resp = auth_resp[0]
+        final_response = await  asyncio.gather(AUTH_CONTROLLER.LogoutUser(user_ins=user_ins))
+        final_response = final_response[0]
 
         return ServerResponse(
-            response=auth_resp.response,
-            code=auth_resp.code,
-            message=auth_resp.message,
-            data=auth_resp.data)
+            response=final_response.response,
+            code=final_response.code,
+            message=final_response.message,
+            data=final_response.data)
 
     except Exception as e:
         # print(f'Error: {e}')
@@ -105,14 +109,14 @@ async def DeleteAccountView(request):
         print(f'user_ins',user_ins)
 
         # Call Auth Controller to Create User
-        auth_resp = await  asyncio.gather(AUTH_CONTROLLER.DeleteUser(user_ins=user_ins))
-        auth_resp = auth_resp[0]
+        final_response = await  asyncio.gather(AUTH_CONTROLLER.DeleteUser(user_ins=user_ins))
+        final_response = final_response[0]
 
         return ServerResponse(
-            response=auth_resp.response,
-            code=auth_resp.code,
-            message=auth_resp.message,
-            data=auth_resp.data)
+            response=final_response.response,
+            code=final_response.code,
+            message=final_response.message,
+            data=final_response.data)
 
     except Exception as e:
         # print(f'Error: {e}')
@@ -134,14 +138,14 @@ async def ForgotPasswordRequestView(request):
         data = MY_METHODS.json_to_object(request.data)
 
         # Call Auth Controller to Create User
-        auth_resp = await  asyncio.gather(AUTH_CONTROLLER.GenerateAndSendForgotPasswordLink(data=data))
-        auth_resp = auth_resp[0]
+        final_response = await  asyncio.gather(AUTH_CONTROLLER.GenerateAndSendForgotPasswordLink(data=data))
+        final_response = final_response[0]
 
         return ServerResponse(
-            response=auth_resp.response,
-            code=auth_resp.code,
-            message=auth_resp.message,
-            data=auth_resp.data)
+            response=final_response.response,
+            code=final_response.code,
+            message=final_response.message,
+            data=final_response.data)
 
     except Exception as e:
         # print(f'Error: {e}')
@@ -153,13 +157,16 @@ async def ForgotPasswordRequestView(request):
                 'error': str(e)
             })
 
-
+######################################
+# Verify forgot password link
+######################################
 @api_view(['GET'])
 async def ForgotPasswordView(request,hash):
     try:
         final_response= await asyncio.gather(AUTH_CONTROLLER.VerifyForgotPasswordLink(hash=hash))
         final_response = final_response[0]
         print(f'final_response {final_response}')
+       
         return ServerResponse(
             response=final_response.response,
             code=final_response.code,
@@ -175,14 +182,14 @@ async def ForgotPasswordView(request,hash):
                 'error': str(e)
             })
 
+######################################
+# Change password
+######################################
 @api_view(['POST'])
 async def ChnagePasswordView(request):
     try:
         # Convert request.data to dot notation object
         data = MY_METHODS.json_to_object(request.data)
-        print(f'password',data.password)
-        print(f'confirm',data.confirm_password)
-        print(f'hash',data.hash)
 
         # Call Auth Controller to Create User
         final_response = await  asyncio.gather(AUTH_CONTROLLER.ChanagePassword(data=data))
@@ -203,7 +210,10 @@ async def ChnagePasswordView(request):
                 'error': str(e)
             })
 
-
+######################################
+# Password Reset View
+######################################
+@api_view(['POST'])
 async def PasswordResetView(request):
     try:
         return JsonResponse({"result": 'success'})

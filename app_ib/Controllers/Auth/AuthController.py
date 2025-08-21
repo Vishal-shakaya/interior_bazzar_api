@@ -1,7 +1,5 @@
-from ast import Try
 import base64
 import json
-import time
 from app_ib.Utils.ResponseMessages import RESPONSE_MESSAGES
 from app_ib.Utils.ResponseCodes import RESPONSE_CODES
 from app_ib.Utils.LocalResponse import LocalResponse
@@ -11,7 +9,10 @@ from app_ib.Utils.MyMethods import MY_METHODS
 
 
 class AUTH_CONTROLLER:
-    
+
+    #####################################
+    # Signup User
+    #####################################    
     @classmethod 
     async def SignupUser(self, data):
         try:
@@ -31,6 +32,7 @@ class AUTH_CONTROLLER:
             # Check if user already exist 
             is_user_exist = await AUTH_TASK.IsUserExist(data.username)
             print(f'is user exist {is_user_exist}')
+            
             if is_user_exist:
                 return LocalResponse(
                     response=RESPONSE_MESSAGES.success,
@@ -38,7 +40,6 @@ class AUTH_CONTROLLER:
                     code=RESPONSE_CODES.success,
                     data={})
             else:
-
                 # Create User
                 user_ins = await AUTH_TASK.CreateUser(data.username, data.password, data.type)
                 print(f'Print username if user created {user_ins.username}')
@@ -69,6 +70,10 @@ class AUTH_CONTROLLER:
                 code=RESPONSE_CODES.error,
                 data={})
 
+
+    #####################################
+    # Login User
+    #####################################
     @classmethod 
     async def LoginUser(self, data):
         try:
@@ -84,6 +89,7 @@ class AUTH_CONTROLLER:
                 # Generate Token and build final response data
                 response_data = await AUTH_TASK.GenerateUserToken(login_user)
                 print(f'response data {response_data}')
+
                 return LocalResponse(
                     response=RESPONSE_MESSAGES.success,
                     message=RESPONSE_MESSAGES.user_login_success,
@@ -103,6 +109,9 @@ class AUTH_CONTROLLER:
                 code=RESPONSE_CODES.error,
                 data={})
 
+    #####################################
+    # Logout User
+    #####################################
     @classmethod
     async def LogoutUser(self, user_ins):
         try:
@@ -121,11 +130,15 @@ class AUTH_CONTROLLER:
                 code=RESPONSE_CODES.error,
                 data={})
 
+    #####################################
+    # Delete User
+    #####################################
     @classmethod
     async def DeleteUser(self, user_ins):
         try:
             delete_user = await AUTH_TASK.DeleteUser(user_ins)
             print(f'delete_user {delete_user}')
+
             if delete_user:
                 return LocalResponse(
                     response=RESPONSE_MESSAGES.success,
@@ -139,6 +152,9 @@ class AUTH_CONTROLLER:
                 code=RESPONSE_CODES.error,
                 data={})
 
+    #############################################
+    # Generate and send forgot password link
+    ##############################################
     @classmethod
     async def GenerateAndSendForgotPasswordLink(self, data):
         try:
@@ -168,7 +184,21 @@ class AUTH_CONTROLLER:
 
                         # Send Email
                     if(user_profile_data):
-                        is_email_sent = await AUTH_TASK.SendForgotPasswordEmail(user_profile_data=user_profile_data,link=link)                        
+                        is_email_sent = await AUTH_TASK.SendForgotPasswordEmail(user_profile_data=user_profile_data,link=link)
+                        if(is_email_sent):                       
+                            return LocalResponse(
+                                response=RESPONSE_MESSAGES.success,
+                                message=RESPONSE_MESSAGES.send_link_success,
+                                code=RESPONSE_CODES.success,
+                                data={
+                                    'link':link,
+                                })
+                        else:
+                            return LocalResponse(
+                                response=RESPONSE_MESSAGES.error,
+                                message=RESPONSE_MESSAGES.send_link_error,
+                                code=RESPONSE_CODES.error,
+                                data={})
 
                 else:
                     return LocalResponse(
@@ -177,14 +207,6 @@ class AUTH_CONTROLLER:
                         code=RESPONSE_CODES.error,
                         data={})
 
-
-            return LocalResponse(
-                response=RESPONSE_MESSAGES.success,
-                message=RESPONSE_MESSAGES.send_link_success,
-                code=RESPONSE_CODES.success,
-                data={
-                    'link':link,
-                })
         except:
             return LocalResponse(
                 response=RESPONSE_MESSAGES.error,
@@ -192,12 +214,16 @@ class AUTH_CONTROLLER:
                 code=RESPONSE_CODES.error,
                 data={})
 
+    #####################################
+    # Reset Password
+    #####################################
     @classmethod
     async def ResetPassword(self, user_ins, data):
         try:
             # Validate Password
             validate_password = await AUTH_VALIDATOR._validate_password(password=data.password)
             print(f'validate_password')
+
             if validate_password.code == RESPONSE_CODES.error:
                 return LocalResponse(
                     code=RESPONSE_CODES.error,
@@ -207,6 +233,7 @@ class AUTH_CONTROLLER:
             
             # Reset Password
             is_password_reset = await AUTH_TASK.ResetPassword(user_ins=user_ins, data=data)
+           
             if is_password_reset:
                 return LocalResponse(
                     response=RESPONSE_MESSAGES.success,
@@ -227,8 +254,9 @@ class AUTH_CONTROLLER:
                 code=RESPONSE_CODES.error,
                 data={})
 
-
-
+    #####################################
+    # Change Password
+    #####################################
     @classmethod
     async def ChanagePassword(self,data):
         try:
@@ -241,21 +269,19 @@ class AUTH_CONTROLLER:
 
             # Validate Password
             validate_password = await AUTH_VALIDATOR._validate_password(password=data.password)
-            print(f'validate_password')
+            print(f'validate_password {validate_password}')
+
             if validate_password.code == RESPONSE_CODES.error:
                 return LocalResponse(
                     code=RESPONSE_CODES.error,
                     response=RESPONSE_MESSAGES.error,
                     message=validate_password.message,
                     data={})
-            
-            decoded_json_str = base64.urlsafe_b64decode(data.hash.encode()).decode()
-            decode_hash = json.loads(decoded_json_str)
-            username = decode_hash['username']
-            timestamp = decode_hash['timestamp']
-            time_difference =  MY_METHODS.GetTimeDifferenceInMinutes(my_time=timestamp)
+        
+            # Decode the hash and get time difference
+            time_difference =  await AUTH_TASK.DecodeHashAndGetTimeDifference(hash=data.hash)
             print(f'time_difference {time_difference}')
-            
+    
             if time_difference > 59:
                 is_password_reset = await AUTH_TASK.ChangePassword(username=username, password=data.password)
                 if is_password_reset:
@@ -278,16 +304,13 @@ class AUTH_CONTROLLER:
                 code=RESPONSE_CODES.error,
                 data={})
 
+    #####################################
+    # Verify Forgot Password Link
+    #####################################
     @classmethod
     async def VerifyForgotPasswordLink(self,hash):
         try:
-            decoded_json_str = base64.urlsafe_b64decode(hash.encode()).decode()
-            decode_hash = json.loads(decoded_json_str)
-            username = decode_hash['username']
-            timestamp = decode_hash['timestamp']
-            # Check if link is expired
-            time_difference =  MY_METHODS.GetTimeDifferenceInMinutes(my_time=timestamp)
-
+            time_difference =  await AUTH_TASK.DecodeHashAndGetTimeDifference(hash=data.hash)
             if time_difference > 59:
                 return LocalResponse(
                     response=RESPONSE_MESSAGES.error,
@@ -296,11 +319,11 @@ class AUTH_CONTROLLER:
                     data={
                         'time_difference':time_difference,
                     })
-
             data = {
                 'key':hash,
                 'expire_in':time_difference,
             }
+            
             return LocalResponse(
                 response=RESPONSE_MESSAGES.success,
                 message=RESPONSE_MESSAGES.default_success,

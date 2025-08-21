@@ -51,7 +51,7 @@ class RESPONSE_MESSAGES:
     password_reset_success= 'Password reset successfully'
     password_reset_error= 'Unable to reset password'
     user_removed_success= 'User removed successfully'
-    password_not_match= 'Password not match'
+    password_not_match= 'Password does not match'
 
 
 
@@ -81,4 +81,9 @@ class RESPONSE_MESSAGES:
 
     query_assign_errror= 'Unable to assign query'
     query_assign_success= 'Query assigned successfully'
+
+class VALIDATION_MESSAGES:
+    password_length= 'Password must be at least 8 characters long'
+    password_must_contain_digit= 'Password must contain at least one digit'
+    password_must_contain_letter= 'Password must contain at least one letter'
 

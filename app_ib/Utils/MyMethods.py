@@ -20,7 +20,7 @@ class MY_METHODS:
         return int(time.time())
     
     @staticmethod
-    def GetTimeDifferenceInMinutes(my_time):
+    async def GetTimeDifferenceInMinutes(my_time):
         timestamp = time.strptime(my_time, "%Y-%m-%d %H:%M:%S")
         current_struct = time.localtime(time.time())
         diff_sec = time.mktime(current_struct) - time.mktime(timestamp)
@@ -85,7 +85,7 @@ class MY_METHODS:
 
 
     @staticmethod
-    def send_email(email, subject, message):
+    async def send_email(email, subject, message):
         """Send email using SMTP"""
         send_mail(
             subject=subject,
