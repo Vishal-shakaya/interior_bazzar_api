@@ -99,7 +99,12 @@ class LeadQuery(models.Model):
     country= models.CharField(max_length=500,default='')
     query= models.TextField(default='')
     status= models.TextField(default='')
+    tag= models.TextField(default='')
+    prio= models.TextField(default='')
     timestamp= models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'name: {self.name}  phone{self.phone}'
 
 
 class BusinessPlan(models.Model):
