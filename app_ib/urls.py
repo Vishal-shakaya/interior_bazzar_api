@@ -25,6 +25,7 @@ urlpatterns = [
     path('v-1/forgot_password_request', AuthView.ForgotPasswordRequestView, name='ForgotPasswordRequestView'),
     path('v-1/forgot-password/<str:hash>', AuthView.ForgotPasswordView, name='ForgotPasswordView'),
     path('v-1/change-password', AuthView.ChnagePasswordView, name='ChnagePasswordView'),
+    path('v-1/reset-password', AuthView.ResetPasswordView, name='ResetPasswordView'),
     
     #########################################################
     # Tokem: 

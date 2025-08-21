@@ -215,10 +215,31 @@ async def ChnagePasswordView(request):
 # Password Reset View
 ######################################
 @api_view(['POST'])
-async def PasswordResetView(request):
+@permission_classes([IsAuthenticated])
+async def ResetPasswordView(request):
     try:
-        return JsonResponse({"result": 'success'})
+        # Convert request.data to dot notation object
+        data = MY_METHODS.json_to_object(request.data)
+
+        user_ins = request.user
+
+        # Call Auth Controller to Create User
+        final_response = await  asyncio.gather(AUTH_CONTROLLER.ResetPassword(user_ins= user_ins, data=data))
+        final_response = final_response[0]
+        print(f'final_response {final_response}')
+
+        return ServerResponse(
+            response=final_response.response,
+            code=final_response.code,
+            message=final_response.message,
+            data=final_response.data)
+
     except Exception as e:
-        print(f'{e}')
-        return JsonResponse({"result": 'error'})
+        return ServerResponse(
+            response=RESPONSE_MESSAGES.error,
+            message=RESPONSE_MESSAGES.user_login_error,
+            code=RESPONSE_CODES.error,
+            data={
+                'error': str(e)
+            })
 
