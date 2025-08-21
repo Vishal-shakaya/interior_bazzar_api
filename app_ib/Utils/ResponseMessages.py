@@ -75,6 +75,13 @@ class RESPONSE_MESSAGES:
     business_loc_fetch_error = "Business location fetch error"
     business_loc_fetch_success = "Business location fetch success"
 
+    business_prof_create_success = "Business profile created successfully"
+    business_prof_update_success = "Business profile updated successfully"
+    business_prof_create_error = "Business profile create error"
+    business_prof_update_error = "Business profile update error"
+    business_prof_fetch_error = "Business profile fetch error"
+    business_prof_fetch_success = "Business profile fetch success"
+
 
 
 

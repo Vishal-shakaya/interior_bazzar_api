@@ -8,6 +8,7 @@ from app_ib.Views import AuthView, QueryView, Feedback
 from app_ib.Views import ProfileView
 from app_ib.Views.Business import BusinessView
 from app_ib.Views.Business import BusinessLocationView
+from app_ib.Views.Business import BusinessProfileView
 
 
 app_name = 'interior_bazzar'
@@ -41,8 +42,6 @@ urlpatterns = [
     path('v-1/create-update-profile-image', ProfileView.CreateOrUpdateProfileImageView, name='CreateOrUpdateProfileImageView'),
     path('v-1/get-profile', ProfileView.GetProfileView, name='GetProfileView'),
 
-
-
     #########################################################
     # Business: 
     #########################################################
@@ -55,6 +54,13 @@ urlpatterns = [
     #########################################################
     path('v-1/create-update-business-location', BusinessLocationView.CreateOrUpdateBusinessLocationView, name='CreateBusinessLocationView'),
     path('v-1/get-business-location-by-id/<int:id>', BusinessLocationView.GetBusinessLocationByBussIDView, name='GetBusinessLocationByBussIDView'),
+
+    #########################################################
+    # Business Profile: 
+    #########################################################
+    path('v-1/create-update-business-profile', BusinessProfileView.CreateOrUpdateBusinessProfileView, name='CreateOrUpdateBusinessProfileView'),
+    path('v-1/get-business-profile-by-id/<int:id>', BusinessProfileView.GetBusinessProfileByBussIDView, name='GetBusinessProfileByBussIDView'),
+    
 
 
     #########################################################
