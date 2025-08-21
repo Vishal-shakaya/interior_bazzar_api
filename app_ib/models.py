@@ -88,27 +88,6 @@ class BusinessLocation(models.Model):
     def __str__(self):
         return f'State: {self.state}  business location{self.business.pk}'
 
-class Subscription(models.Model):
-    detail= models.TextField()
-    services= models.TextField()
-    is_active= models.BooleanField(default=False)
-    timestamp= models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f'review:{self.review} rating:{self.rating}'
-
-class Plan(models.Model):
-    business= models.ForeignKey(Business,on_delete=models.CASCADE, null=True, blank=True)
-    services= models.TextField()
-    is_active= models.BooleanField(default=False)
-    plan_summary= models.TextField()
-    last_activate= models.DateTimeField(auto_now_add=True)
-    expire_date= models.DateTimeField(auto_now_add=True)
-    timestamp= models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f'is_active:{self.is_active} expire_date:{self.expire_date}'
-
 class LeadQuery(models.Model):
     business= models.ForeignKey(Business,on_delete=models.CASCADE, null=True, blank=True)
     user= models.ForeignKey(CustomUser,on_delete=models.CASCADE, null=True, blank=True)
@@ -122,15 +101,44 @@ class LeadQuery(models.Model):
     status= models.TextField(default='')
     timestamp= models.DateTimeField(auto_now_add=True)
 
+
+class BusinessPlan(models.Model):
+    business= models.ForeignKey(Business,on_delete=models.CASCADE, null=True, blank=True)
+    services= models.TextField()
+    is_active= models.BooleanField(default=False)
+    plan_summary= models.TextField()
+    last_activate= models.DateTimeField(auto_now_add=True)
+    expire_date= models.DateTimeField(auto_now_add=True)
+    timestamp= models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'is_active:{self.is_active} expire_date:{self.expire_date}'
+
+
     def __str__(self):
         return f'phone:{self.phone} query:{self.query}'
 
 class PlanQuery(models.Model):
     user= models.ForeignKey(CustomUser,on_delete=models.CASCADE, null=True, blank=True)
+    plan= models.CharField(max_length=500,default='')
+    name= models.CharField(max_length=500,default='')
+    email= models.CharField(max_length=500,default='')
+    phone= models.CharField(max_length=500,default='')
+    transaction_id= models.CharField(max_length=500,default='')
+    stage= models.CharField(max_length=500,default='') #{"1":"Lead","2":"Contacted","3":"Followed Up","4":"Closed"}
+    attachment= models.FileField(null=True, blank=True, upload_to='lead_query/attachment')
+    timestamp= models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'phone:{self.phone} stage:{self.stage}'
+
+class Quate(models.Model):
+    interested= models.CharField(max_length=500,default='')
+    note= models.CharField(max_length=500,default='')
+    name= models.CharField(max_length=500,default='')
     email= models.CharField(max_length=500,default='')
     phone= models.CharField(max_length=500,default='')
     stage= models.CharField(max_length=500,default='') #{"1":"Lead","2":"Contacted","3":"Followed Up","4":"Closed"}
-    attachment= models.FileField(null=True, blank=True, upload_to='lead_query/attachment')
     timestamp= models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -146,6 +154,15 @@ class Feedback(models.Model):
 
     def __str__(self):
         return f'contact:{self.contact} feedback:{self.feedback}'
+
+
+class Subscription(models.Model):
+    detail= models.TextField()
+    services= models.TextField()
+    is_active= models.BooleanField(default=False)
+    timestamp= models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f'review:{self.review} rating:{self.rating}'
 
 class Blog(models.Model):
     user= models.ForeignKey(CustomUser,on_delete=models.CASCADE, null=True, blank=True)
