@@ -68,6 +68,16 @@ class RESPONSE_MESSAGES:
     business_fetch_success= 'Business detail fetched'
     business_already_exist = "Business already exist"
 
+    business_loc_create_success = "Business location created successfully"
+    business_loc_update_success = "Business location updated successfully"
+    business_loc_create_error = "Business location create error"
+    business_loc_update_error = "Business location update error"
+    business_loc_fetch_error = "Business location fetch error"
+    business_loc_fetch_success = "Business location fetch success"
+
+
+
+
 
     ############################################
     #Query

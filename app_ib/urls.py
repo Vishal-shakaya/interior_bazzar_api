@@ -7,6 +7,7 @@ from rest_framework_simplejwt.views import (TokenRefreshView)
 from app_ib.Views import AuthView, QueryView, Feedback
 from app_ib.Views import ProfileView
 from app_ib.Views.Business import BusinessView
+from app_ib.Views.Business import BusinessLocationView
 
 
 app_name = 'interior_bazzar'
@@ -52,6 +53,9 @@ urlpatterns = [
     #########################################################
     # Business Location: 
     #########################################################
+    path('v-1/create-update-business-location', BusinessLocationView.CreateOrUpdateBusinessLocationView, name='CreateBusinessLocationView'),
+    path('v-1/get-business-location-by-id/<int:id>', BusinessLocationView.GetBusinessLocationByBussIDView, name='GetBusinessLocationByBussIDView'),
+
 
     #########################################################
     # Query: 
