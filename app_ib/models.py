@@ -101,6 +101,8 @@ class LeadQuery(models.Model):
     status= models.TextField(default='')
     tag= models.TextField(default='')
     prio= models.TextField(default='')
+    interested= models.TextField(default='')
+    remark= models.TextField(default='')
     timestamp= models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
