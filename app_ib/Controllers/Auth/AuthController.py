@@ -6,6 +6,7 @@ from app_ib.Utils.LocalResponse import LocalResponse
 from app_ib.Controllers.Auth.Tasks.AuthTasks import AUTH_TASK
 from app_ib.Controllers.Auth.Validators.AuthValidators import AUTH_VALIDATOR
 from app_ib.Utils.MyMethods import MY_METHODS
+from app_ib.Utils.StaticValues import STATICVALUES
 
 
 class AUTH_CONTROLLER:
@@ -260,6 +261,7 @@ class AUTH_CONTROLLER:
     @classmethod
     async def ChanagePassword(self,data):
         try:
+            print(f'data {data}')
             if(data.password != data.confirm_password):
                 return LocalResponse(
                     response=RESPONSE_MESSAGES.error,
@@ -280,10 +282,10 @@ class AUTH_CONTROLLER:
         
             # Decode the hash and get time difference
             time_difference =  await AUTH_TASK.DecodeHashAndGetTimeDifference(hash=data.hash)
-            print(f'time_difference {time_difference}')
-    
-            if time_difference > 59:
-                is_password_reset = await AUTH_TASK.ChangePassword(username=username, password=data.password)
+            if time_difference < STATICVALUES.PASSWORD_RESET_TIME_LIMIT:
+                print(f'time_difference {time_difference}')
+                
+                is_password_reset = await AUTH_TASK.ChangePassword(hash=data.hash, password=data.password)
                 if is_password_reset:
                     return LocalResponse(
                         response=RESPONSE_MESSAGES.success,
@@ -297,7 +299,8 @@ class AUTH_CONTROLLER:
                         code=RESPONSE_CODES.error,
                         data={})
 
-        except:
+        except Exception as e:
+            print(f'Error: {e}')
             return LocalResponse(
                 response=RESPONSE_MESSAGES.error,
                 message=RESPONSE_MESSAGES.password_reset_error,
@@ -310,7 +313,8 @@ class AUTH_CONTROLLER:
     @classmethod
     async def VerifyForgotPasswordLink(self,hash):
         try:
-            time_difference =  await AUTH_TASK.DecodeHashAndGetTimeDifference(hash=data.hash)
+            print(f'hash {hash}')
+            time_difference =  await AUTH_TASK.DecodeHashAndGetTimeDifference(hash=hash)
             if time_difference > 59:
                 return LocalResponse(
                     response=RESPONSE_MESSAGES.error,
@@ -321,7 +325,8 @@ class AUTH_CONTROLLER:
                     })
             data = {
                 'key':hash,
-                'expire_in':time_difference,
+                'expire_in': (STATICVALUES.PASSWORD_RESET_TIME_LIMIT-time_difference),
+
             }
             
             return LocalResponse(

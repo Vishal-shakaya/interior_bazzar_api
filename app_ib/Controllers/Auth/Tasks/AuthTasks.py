@@ -157,7 +157,7 @@ class AUTH_TASK:
     async def SendForgotPasswordEmail(self,user_profile_data,link):
         try:
             email = user_profile_data['email']
-            await sync_to_async(MY_METHODS.send_email)(
+            await MY_METHODS.send_email(
                 email=email,
                 subject='Forgot Password',
                 message=f'Click on the link to reset password {link}'
@@ -185,20 +185,6 @@ class AUTH_TASK:
             return None
 
 
-    ###############################################
-    # Change Password
-    ###############################################
-    @classmethod
-    async def ChangePassword(self, username, password):
-        try:
-            user_ins = await sync_to_async(CustomUser.objects.get)(username=username)
-            user_ins.password = password
-            await sync_to_async(user_ins.save)()
-            return True
-
-        except Exception as e:
-            print(f'Error in ResetPassword {e}')
-            return None
 
     @classmethod
     async def DecodeHashAndGetTimeDifference(self,hash):
@@ -207,8 +193,32 @@ class AUTH_TASK:
             decode_hash = json.loads(decoded_json_str)
             username = decode_hash['username']
             timestamp = decode_hash['timestamp']
-            time_difference =  await sync_to_async(MY_METHODS.GetTimeDifferenceInMinutes)(my_time=timestamp)
+            time_difference =  await MY_METHODS.GetTimeDifferenceInMinutes(my_time=timestamp)
             return time_difference
         except Exception as e:
             print(f'Error in DecodeHash {e}')
+            return None
+
+    ###############################################
+    # Change Password
+    ###############################################
+    @classmethod
+    async def ChangePassword(self, hash, password):
+        try:
+            print(f'hash {hash}')
+            print(f'password {password}')
+
+            decoded_json_str = base64.urlsafe_b64decode(hash.encode()).decode()
+            decode_hash = json.loads(decoded_json_str)
+            username = decode_hash['username']
+            print(f'username {username}')
+            
+
+            user_ins = await sync_to_async(CustomUser.objects.get)(username=username)
+            user_ins.password = password
+            await sync_to_async(user_ins.save)()
+            return True
+
+        except Exception as e:
+            print(f'Error in ResetPassword {e}')
             return None

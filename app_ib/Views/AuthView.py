@@ -194,6 +194,7 @@ async def ChnagePasswordView(request):
         # Call Auth Controller to Create User
         final_response = await  asyncio.gather(AUTH_CONTROLLER.ChanagePassword(data=data))
         final_response = final_response[0]
+        print(f'final_response {final_response}')
 
         return ServerResponse(
             response=final_response.response,
