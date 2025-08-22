@@ -67,8 +67,9 @@ urlpatterns = [
     # Query: 
     #########################################################
     path('v-1/create-query', QueryView.CreateQueryView, name='CreateQueryView'),
-    path('v-1/get-query-by-id/<int:id>', QueryView.GetQueryByIdView, name='GetQueryByIdView'),
-    path('v-1/get-query-by-business-id/<int:id>', QueryView.GetQueryBusinessIdView, name='GetQueryBusinessIdView'),
+    path('v-1/update-query-id', QueryView.UpdateQueryByIDView, name='UpdateQueryByIDView'),
+    path('v-1/get-query-id/<int:id>', QueryView.GetQueryBusinessIdView, name='GetQueryBusinessIdView'),
+
   
     #########################################################
     # Feedback: 

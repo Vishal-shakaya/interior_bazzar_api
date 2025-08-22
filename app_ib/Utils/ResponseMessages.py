@@ -92,6 +92,9 @@ class RESPONSE_MESSAGES:
     query_generate_error= 'Unable to generate query'
     query_generate_success= 'Query generated successfully'
 
+    query_update_error= 'Unable to update query'
+    query_update_success= 'Query update successfully'
+
     query_remove_error= 'Unable to remove query'
     query_remove_success= 'Query deleted successfully'
 

@@ -27,7 +27,7 @@ async def CreateQueryView(request):
             code=final_response.code,
             message=final_response.message,
             data=final_response.data)
-        return JsonResponse({'response':"success"})
+
     except Exception as e:
         # print(f'Error: {e}')
         return ServerResponse(
@@ -38,12 +38,63 @@ async def CreateQueryView(request):
                 'error': str(e)
             })
 
-async def GetQueryByIdView(request,id):
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+async def UpdateQueryByIDView(request):
     try:
-        return JsonResponse({"result": 'success'})
+        # Convert request.data to dot notation object
+        data= MY_METHODS.json_to_object(request.data)
+        user_ins= request.user 
+
+        # Call Auth Controller to Create User
+        final_response = await  asyncio.gather(LEAD_QUERY_CONTROLLER.UpdateLeadQuery(data=data))
+        final_response = final_response[0]
+
+        return ServerResponse(
+            response=final_response.response,
+            code=final_response.code,
+            message=final_response.message,
+            data=final_response.data)
+
     except Exception as e:
-        print(f'{e}')
-        return JsonResponse({"result": 'error'})
+        return ServerResponse(
+            response=RESPONSE_MESSAGES.error,
+            message=RESPONSE_MESSAGES.query_update_error,
+            code=RESPONSE_CODES.error,
+            data={
+                'error': str(e)
+            })
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+async def GetQueryByID(request,id):
+    try:
+        # Convert request.data to dot notation object
+        data= MY_METHODS.json_to_object(request.data)
+        user_ins= request.user 
+
+        # Call Auth Controller to Create User
+        final_response = await  asyncio.gather(LEAD_QUERY_CONTROLLER.GetQueryById(id=id))
+        final_response = final_response[0]
+
+        return ServerResponse(
+            response=final_response.response,
+            code=final_response.code,
+            message=final_response.message,
+            data=final_response.data)
+
+    except Exception as e:
+        return ServerResponse(
+            response=RESPONSE_MESSAGES.error,
+            message=RESPONSE_MESSAGES.query_fetch_error,
+            code=RESPONSE_CODES.error,
+            data={
+                'error': str(e)
+            })
+
+
 
 async def GetQueryBusinessIdView(request,id):
     try:
