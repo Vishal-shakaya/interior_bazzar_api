@@ -92,21 +92,21 @@ class LeadQuery(models.Model):
     business= models.ForeignKey(Business,on_delete=models.CASCADE, null=True, blank=True)
     user= models.ForeignKey(CustomUser,on_delete=models.CASCADE, null=True, blank=True)
     name= models.CharField(max_length=500,default='')
-    email= models.CharField(max_length=500,default='')
     phone= models.CharField(max_length=500,default='')
-    state= models.CharField(max_length=500,default='')
-    city= models.CharField(max_length=500,default='')
-    country= models.CharField(max_length=500,default='')
+    email= models.CharField(max_length=500,default='')
+    interested= models.TextField(default='')
     query= models.TextField(default='')
+    city= models.CharField(max_length=500,default='')
+    state= models.CharField(max_length=500,default='')
+    country= models.CharField(max_length=500,default='')
     status= models.TextField(default='')
     tag= models.TextField(default='')
-    prio= models.TextField(default='')
-    interested= models.TextField(default='')
-    remark= models.TextField(default='')
+    priority= models.TextField(default='')
+    remark= models.TextField(default='',null=True,blank=True)
     timestamp= models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'name: {self.name}  phone{self.phone}'
+        return f'name: {self.name}  phone{self.phone} date {self.timestamp}'
 
 
 class BusinessPlan(models.Model):
