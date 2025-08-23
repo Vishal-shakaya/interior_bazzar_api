@@ -55,6 +55,7 @@ urlpatterns = [
     path('v-1/create-update-business-location', BusinessLocationView.CreateOrUpdateBusinessLocationView, name='CreateBusinessLocationView'),
     path('v-1/get-business-location-by-id/<int:id>', BusinessLocationView.GetBusinessLocationByBussIDView, name='GetBusinessLocationByBussIDView'),
 
+
     #########################################################
     # Business Profile: 
     #########################################################
@@ -69,6 +70,9 @@ urlpatterns = [
     path('v-1/create-query', QueryView.CreateQueryView, name='CreateQueryView'),
     path('v-1/update-query-id', QueryView.UpdateQueryByIDView, name='UpdateQueryByIDView'),
     path('v-1/get-business-queries', QueryView.GetQueryBusinessView, name='GetQueryBusinessView'),
+    path('v-1/udpate-query-status', QueryView.UpdateQueryStatusView, name='UpdateQueryStatusView'),
+    path('v-1/udpate-query-priority', QueryView.UpdateQueryPriorityView, name='UpdateQueryPriorityView'),
+    path('v-1/udpate-query-remark', QueryView.UpdateQueryRemarkView, name='UpdateQueryPriorityView'),
 
   
     #########################################################

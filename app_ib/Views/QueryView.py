@@ -66,6 +66,87 @@ async def UpdateQueryByIDView(request):
                 'error': str(e)
             })
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+async def UpdateQueryStatusView(request):
+    try:
+        # Convert request.data to dot notation object
+        data= MY_METHODS.json_to_object(request.data)
+        user_ins= request.user 
+    
+        # Call Auth Controller to Create User
+        final_response = await  asyncio.gather(LEAD_QUERY_CONTROLLER.UpdateLeadQueryStatus(data=data))
+        final_response = final_response[0]
+
+        return ServerResponse(
+            response=final_response.response,
+            code=final_response.code,
+            message=final_response.message,
+            data=final_response.data)
+
+    except Exception as e:
+        return ServerResponse(
+            response=RESPONSE_MESSAGES.error,
+            message=RESPONSE_MESSAGES.query_update_error,
+            code=RESPONSE_CODES.error,
+            data={
+                'error': str(e)
+            })
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+async def UpdateQueryPriorityView(request):
+    try:
+        # Convert request.data to dot notation object
+        data= MY_METHODS.json_to_object(request.data)
+        user_ins= request.user 
+    
+        # Call Auth Controller to Create User
+        final_response = await  asyncio.gather(LEAD_QUERY_CONTROLLER.UpdateLeadQueryPriority(data=data))
+        final_response = final_response[0]
+
+        return ServerResponse(
+            response=final_response.response,
+            code=final_response.code,
+            message=final_response.message,
+            data=final_response.data)
+
+    except Exception as e:
+        return ServerResponse(
+            response=RESPONSE_MESSAGES.error,
+            message=RESPONSE_MESSAGES.query_update_error,
+            code=RESPONSE_CODES.error,
+            data={
+                'error': str(e)
+            })
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+async def UpdateQueryRemarkView(request):
+    try:
+        # Convert request.data to dot notation object
+        data= MY_METHODS.json_to_object(request.data)
+        user_ins= request.user 
+    
+        # Call Auth Controller to Create User
+        final_response = await  asyncio.gather(LEAD_QUERY_CONTROLLER.UpdateLeadQueryRemark(data=data))
+        final_response = final_response[0]
+
+        return ServerResponse(
+            response=final_response.response,
+            code=final_response.code,
+            message=final_response.message,
+            data=final_response.data)
+
+    except Exception as e:
+        return ServerResponse(
+            response=RESPONSE_MESSAGES.error,
+            message=RESPONSE_MESSAGES.query_update_error,
+            code=RESPONSE_CODES.error,
+            data={
+                'error': str(e)
+            })
+
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

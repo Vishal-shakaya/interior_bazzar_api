@@ -46,6 +46,40 @@ class LEAD_QUERY_TASK:
             return None
 
     @classmethod
+    async def UpdateLeadQueryStatusTask(self, lead_query_ins, data):
+        try:
+            lead_query_ins.status= data.status            
+            await sync_to_async(lead_query_ins.save)()
+            return True
+            
+        except Exception as e:
+            print(f'Error in CreateLeadQueryTask {e}')
+            return None
+
+    @classmethod
+    async def UpdateLeadQueryPriorityTask(self, lead_query_ins, data):
+        try:
+            lead_query_ins.priority= data.priority            
+            await sync_to_async(lead_query_ins.save)()
+            return True
+            
+        except Exception as e:
+            print(f'Error in CreateLeadQueryTask {e}')
+            return None
+
+    @classmethod
+    async def UpdateLeadQueryRemarkTask(self, lead_query_ins, data):
+        try:
+            lead_query_ins.remark= data.remark            
+            await sync_to_async(lead_query_ins.save)()
+            return True
+            
+        except Exception as e:
+            print(f'Error in CreateLeadQueryTask {e}')
+            return None
+
+
+    @classmethod
     async def GetLeadQueryTask(self, lead_query_ins):
         try:
             data = {
@@ -73,8 +107,8 @@ class LEAD_QUERY_TASK:
         try:
             query_data = []
             async for lead_query in LeadQuery.objects.filter(business=business_ins):
-                print(f'lead {lead_query}')
                 data = {
+                    'id': lead_query.pk,
                     'name': lead_query.name,
                     'phone': lead_query.phone,
                     'email': lead_query.email,

@@ -127,6 +127,121 @@ class LEAD_QUERY_CONTROLLER:
                     'error': str(e)
                 })
 
+
+
+    @classmethod
+    async def UpdateLeadQueryStatus(self, data):
+        try:
+            lead_query_ins= None
+            is_query_exist = await sync_to_async(LeadQuery.objects.filter(id=data.id).exists)()
+            print(f'is_query_exist {is_query_exist}')
+
+            if(is_query_exist):
+                lead_query_ins = await sync_to_async(LeadQuery.objects.get)(id=data.id)
+                print(f'lead_query_ins {lead_query_ins}')   
+                
+                create_query_resp = await  LEAD_QUERY_TASK.UpdateLeadQueryStatusTask(lead_query_ins=lead_query_ins,data=data)
+                print(f'update query resp {create_query_resp}')
+
+                if create_query_resp:
+                    return LocalResponse(
+                        response=RESPONSE_MESSAGES.success,
+                        message=RESPONSE_MESSAGES.query_update_success,
+                        code=RESPONSE_CODES.success,
+                        data=create_query_resp)
+
+                else:
+                    return LocalResponse(
+                        response=RESPONSE_MESSAGES.error,
+                        message=RESPONSE_MESSAGES.query_update_error,
+                        code=RESPONSE_CODES.error,
+                        data={})
+
+        except Exception as e:
+            return LocalResponse(
+                response=RESPONSE_MESSAGES.error,
+                message=RESPONSE_MESSAGES.query_update_error,
+                code=RESPONSE_CODES.error,
+                data={
+                    'error': str(e)
+                })
+
+    @classmethod
+    async def UpdateLeadQueryPriority(self, data):
+        try:
+            lead_query_ins= None
+            is_query_exist = await sync_to_async(LeadQuery.objects.filter(id=data.id).exists)()
+            print(f'is_query_exist {is_query_exist}')
+
+            if(is_query_exist):
+                lead_query_ins = await sync_to_async(LeadQuery.objects.get)(id=data.id)
+                print(f'lead_query_ins {lead_query_ins}')   
+                
+                create_query_resp = await  LEAD_QUERY_TASK.UpdateLeadQueryPriorityTask(lead_query_ins=lead_query_ins,data=data)
+                print(f'update query resp {create_query_resp}')
+
+                if create_query_resp:
+                    return LocalResponse(
+                        response=RESPONSE_MESSAGES.success,
+                        message=RESPONSE_MESSAGES.query_update_success,
+                        code=RESPONSE_CODES.success,
+                        data=create_query_resp)
+
+                else:
+                    return LocalResponse(
+                        response=RESPONSE_MESSAGES.error,
+                        message=RESPONSE_MESSAGES.query_update_error,
+                        code=RESPONSE_CODES.error,
+                        data={})
+
+        except Exception as e:
+            return LocalResponse(
+                response=RESPONSE_MESSAGES.error,
+                message=RESPONSE_MESSAGES.query_update_error,
+                code=RESPONSE_CODES.error,
+                data={
+                    'error': str(e)
+                })
+
+    @classmethod
+    async def UpdateLeadQueryRemark(self, data):
+        try:
+            lead_query_ins= None
+            is_query_exist = await sync_to_async(LeadQuery.objects.filter(id=data.id).exists)()
+            print(f'is_query_exist {is_query_exist}')
+
+            if(is_query_exist):
+                lead_query_ins = await sync_to_async(LeadQuery.objects.get)(id=data.id)
+                print(f'lead_query_ins {lead_query_ins}')   
+                
+                create_query_resp = await  LEAD_QUERY_TASK.UpdateLeadQueryRemarkTask(lead_query_ins=lead_query_ins,data=data)
+                print(f'update query resp {create_query_resp}')
+
+                if create_query_resp:
+                    return LocalResponse(
+                        response=RESPONSE_MESSAGES.success,
+                        message=RESPONSE_MESSAGES.query_update_success,
+                        code=RESPONSE_CODES.success,
+                        data=create_query_resp)
+
+                else:
+                    return LocalResponse(
+                        response=RESPONSE_MESSAGES.error,
+                        message=RESPONSE_MESSAGES.query_update_error,
+                        code=RESPONSE_CODES.error,
+                        data={})
+
+        except Exception as e:
+            return LocalResponse(
+                response=RESPONSE_MESSAGES.error,
+                message=RESPONSE_MESSAGES.query_update_error,
+                code=RESPONSE_CODES.error,
+                data={
+                    'error': str(e)
+                })
+
+
+
     @classmethod
     async def GetQueryById(self, id):
         try:
@@ -176,7 +291,7 @@ class LEAD_QUERY_CONTROLLER:
                  business_ins = await sync_to_async(Business.objects.get)(user=user_ins)
                 
                  buss_queries = await LEAD_QUERY_TASK.GetLeadQueriesTask(business_ins=business_ins)
-                 print(f'queries {buss_queries}')
+                #  print(f'queries {buss_queries}')
                  if buss_queries:
                     return LocalResponse(
                         response=RESPONSE_MESSAGES.success,
