@@ -1,3 +1,4 @@
+import random
 from ast import Pass
 import time
 from types import SimpleNamespace
@@ -11,6 +12,11 @@ from app_ib.models import CustomUser
 
 
 class MY_METHODS:
+    @staticmethod
+    async def get_random_rating():
+        rating = random.uniform(3, 5)
+        return round(rating, 1)  # round to 1 decimal place
+
     @staticmethod
     def GetCurrentTimeinStr():
         return time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
