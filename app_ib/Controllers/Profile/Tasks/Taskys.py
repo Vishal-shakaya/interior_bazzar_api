@@ -62,8 +62,9 @@ class PROFILE_TASKS:
                 'name': user_profile_ins.name,
                 'email': user_profile_ins.email,
                 'phone': user_profile_ins.phone,
-                'profile_image': user_profile_ins.profile_image.url,
             }
+            if(user_profile_ins.profile_image):
+                user_profile_data['profile_image']=user_profile_ins.profile_image.url
             return user_profile_data
             
         except Exception as e:
