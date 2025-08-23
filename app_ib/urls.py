@@ -9,6 +9,7 @@ from app_ib.Views import ProfileView
 from app_ib.Views.Business import BusinessView
 from app_ib.Views.Business import BusinessLocationView
 from app_ib.Views.Business import BusinessProfileView
+from app_ib.Views import SearchView
 
 
 app_name = 'interior_bazzar'
@@ -82,4 +83,9 @@ urlpatterns = [
     # Feedback: 
     #########################################################
     path('v-1/create-feedback', Feedback.CreateFeedbackView, name='CreateFeedbackView'),
+ 
+    #########################################################
+    # Serachview: 
+    #########################################################
+    path('v-1/get-business/<int:index>', SearchView.GetBusinessByPaginationView, name='GetBusinessByPaginationView'),
 ]
