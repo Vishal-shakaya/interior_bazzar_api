@@ -66,3 +66,64 @@ async def GetBusinessProfileByBussIDView(request,id):
             data={
                 'error': str(e)
             })
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+async def CreateOrUpdatePrimaryImageView(request):
+    try:
+        # Get user instance
+        user_ins = request.user
+        primary_image = request.FILES.get('primary_image')  
+        print(f'primary image {primary_image}')
+
+        # Call Auth Controller to Create User
+        auth_resp = await  asyncio.gather(BUSS_PROFILE_CONTROLLER.CreateOrUpdatePrimaryImage(primary_image=primary_image,user_ins=user_ins))
+
+        auth_resp = auth_resp[0]
+
+        return ServerResponse(
+            response=auth_resp.response,
+            code=auth_resp.code,
+            message=auth_resp.message,
+            data=auth_resp.data)
+
+    except Exception as e:
+        # print(f'Error: {e}')
+        return ServerResponse(
+            response=RESPONSE_MESSAGES.error,
+            message=RESPONSE_MESSAGES.user_profile_create_error,
+            code=RESPONSE_CODES.error,
+            data={
+                'error': str(e)
+            })
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+async def CreateOrUpdateSecondaryImageView(request):
+    try:
+        # Get user instance
+        user_ins = request.user
+        secondary_image = request.FILES.get('secondary_image')  
+        print(f'secondary image  {secondary_image}')
+
+        # Call Auth Controller to Create User
+        auth_resp = await  asyncio.gather(BUSS_PROFILE_CONTROLLER.CreateOrUpdateSecondaryImage(secondary_image=secondary_image,user_ins=user_ins))
+        auth_resp = auth_resp[0]
+
+        return ServerResponse(
+            response=auth_resp.response,
+            code=auth_resp.code,
+            message=auth_resp.message,
+            data=auth_resp.data)
+
+    except Exception as e:
+        # print(f'Error: {e}')
+        return ServerResponse(
+            response=RESPONSE_MESSAGES.error,
+            message=RESPONSE_MESSAGES.default_error,
+            code=RESPONSE_CODES.error,
+            data={
+                'error': str(e)
+            })

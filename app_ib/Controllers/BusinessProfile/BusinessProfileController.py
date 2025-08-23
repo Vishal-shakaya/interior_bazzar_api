@@ -115,3 +115,86 @@ class BUSS_PROFILE_CONTROLLER:
                 data={
                     'error': str(e)
                 })
+
+    @classmethod 
+    async def CreateOrUpdatePrimaryImage(self, user_ins, primary_image):
+        try:
+            business_ins = None
+            is_business_exist = await sync_to_async(Business.objects.filter(user=user_ins).exists)()
+            print(f'is_business_exist {is_business_exist}')
+
+            if(is_business_exist): 
+                business_ins = await sync_to_async(Business.objects.get)(user=user_ins)
+
+            is_buss_prof_ins_exist = await sync_to_async(BusinessProfile.objects.filter(business=business_ins).exists)()
+            print(f'is_buss_prof_ins_exist {is_buss_prof_ins_exist}')
+
+            # Update Profile Image if already exist : 
+            if is_buss_prof_ins_exist:
+                profile_ins = await sync_to_async(BusinessProfile.objects.get)(business=business_ins)
+                profile_ins.primary_image = primary_image
+                await sync_to_async(profile_ins.save)()
+
+            # Create Profile Image if not exist : 
+            else:
+                profile_ins = BusinessProfile()
+                profile_ins.business = business_ins
+                profile_ins.primary_image = primary_image
+                await sync_to_async(profile_ins.save)()
+            
+            return LocalResponse(
+                response=RESPONSE_MESSAGES.success,
+                message=RESPONSE_MESSAGES.update_success,
+                code=RESPONSE_CODES.success,
+                data={})
+
+        except Exception as e:
+            return LocalResponse(
+                response=RESPONSE_MESSAGES.error,
+                message=RESPONSE_MESSAGES.default_error,
+                code=RESPONSE_CODES.error,
+                data={
+                    'error': str(e)
+                })
+
+    @classmethod 
+    async def CreateOrUpdateSecondaryImage(self, user_ins, secondary_image):
+        try:
+            business_ins = None
+            is_business_exist = await sync_to_async(Business.objects.filter(user=user_ins).exists)()
+            print(f'is_business_exist {is_business_exist}')
+
+            if(is_business_exist): 
+                business_ins = await sync_to_async(Business.objects.get)(user=user_ins)
+
+            is_buss_prof_ins_exist = await sync_to_async(BusinessProfile.objects.filter(business=business_ins).exists)()
+            print(f'is_buss_prof_ins_exist {is_buss_prof_ins_exist}')
+
+            # Update Profile Image if already exist : 
+            if is_buss_prof_ins_exist:
+                profile_ins = await sync_to_async(BusinessProfile.objects.get)(business=business_ins)
+                profile_ins.secondary_images = secondary_image
+                await sync_to_async(profile_ins.save)()
+
+            # Create Profile Image if not exist : 
+            else:
+                profile_ins = BusinessProfile()
+                profile_ins.business = business_ins
+                profile_ins.secondary_images = secondary_image
+                await sync_to_async(profile_ins.save)()
+            
+            return LocalResponse(
+                response=RESPONSE_MESSAGES.success,
+                message=RESPONSE_MESSAGES.update_success,
+                code=RESPONSE_CODES.success,
+                data={})
+
+        except Exception as e:
+            return LocalResponse(
+                response=RESPONSE_MESSAGES.error,
+                message=RESPONSE_MESSAGES.default_error,
+                code=RESPONSE_CODES.error,
+                data={
+                    'error': str(e)
+                })
+        

@@ -61,6 +61,9 @@ urlpatterns = [
     #########################################################
     path('v-1/create-update-business-profile', BusinessProfileView.CreateOrUpdateBusinessProfileView, name='CreateOrUpdateBusinessProfileView'),
     path('v-1/get-business-profile-by-id/<int:id>', BusinessProfileView.GetBusinessProfileByBussIDView, name='GetBusinessProfileByBussIDView'),
+    path('v-1/create-or-update-primary-image', BusinessProfileView.CreateOrUpdatePrimaryImageView, name='CreateOrUpdateProfileImageView'),
+    path('v-1/create-or-update-secondary-image', BusinessProfileView.CreateOrUpdateSecondaryImageView, name='CreateOrUpdateSecondaryImageView'),
+
     
 
 
