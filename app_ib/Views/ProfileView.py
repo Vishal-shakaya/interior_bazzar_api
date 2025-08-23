@@ -23,7 +23,7 @@ async def CreateProfileView(request):
         data = MY_METHODS.json_to_object(request.data)
         
         # Call Auth Controller to Create User
-        auth_resp = await  asyncio.gather(PROFILE_CONTROLLER.CreateProfile(
+        auth_resp = await  asyncio.gather(PROFILE_CONTROLLER.CreateOrUpdateProfile(
             user_ins=user_ins, data=data))
         auth_resp = auth_resp[0]
 
@@ -72,6 +72,7 @@ async def CreateOrUpdateProfileImageView(request):
                 'error': str(e)
             })
 
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 async def GetProfileView(request):
@@ -80,9 +81,7 @@ async def GetProfileView(request):
         user_ins = request.user
         
         # Call Auth Controller to Create User
-        auth_resp = await  asyncio.gather(PROFILE_CONTROLLER.GetProfile(
-            user_ins=user_ins))
-
+        auth_resp = await  asyncio.gather(PROFILE_CONTROLLER.GetProfile(user_ins=user_ins))
         auth_resp = auth_resp[0]
 
         return ServerResponse(
@@ -92,7 +91,6 @@ async def GetProfileView(request):
             data=auth_resp.data)
 
     except Exception as e:
-        # print(f'Error: {e}')
         return ServerResponse(
             response=RESPONSE_MESSAGES.error,
             message=RESPONSE_MESSAGES.user_profile_create_error,
