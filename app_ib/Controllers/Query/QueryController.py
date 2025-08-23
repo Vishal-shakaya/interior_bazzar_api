@@ -138,27 +138,64 @@ class LEAD_QUERY_CONTROLLER:
                 lead_query_ins = await sync_to_async(LeadQuery.objects.get)(id=id)
                 print(f'lead_query_ins {lead_query_ins}') 
                 
-                create_query_resp = await  LEAD_QUERY_TASK.GetLeadQueryTask(lead_query_ins=lead_query_ins)
-                print(f'update query resp {create_query_resp}')
+                fetch_query_response = await  LEAD_QUERY_TASK.GetLeadQueryTask(lead_query_ins=lead_query_ins)
+                print(f'update query resp {fetch_query_response}')
 
-                if create_query_resp:
+                if fetch_query_response:
                     return LocalResponse(
                         response=RESPONSE_MESSAGES.success,
-                        message=RESPONSE_MESSAGES.query_update_success,
+                        message=RESPONSE_MESSAGES.query_fetch_success,
                         code=RESPONSE_CODES.success,
-                        data=create_query_resp)
+                        data=fetch_query_response)
 
                 else:
                     return LocalResponse(
                         response=RESPONSE_MESSAGES.error,
-                        message=RESPONSE_MESSAGES.query_update_error,
+                        message=RESPONSE_MESSAGES.query_fetch_error,
                         code=RESPONSE_CODES.error,
                         data={})
 
         except Exception as e:
             return LocalResponse(
                 response=RESPONSE_MESSAGES.error,
-                message=RESPONSE_MESSAGES.query_update_error,
+                message=RESPONSE_MESSAGES.query_fetch_error,
+                code=RESPONSE_CODES.error,
+                data={
+                    'error': str(e)
+                })
+
+    @classmethod
+    async def GetBusinessQueries(self, user_ins):
+        try:
+            lead_query_ins= None
+
+            is_business_exist = await sync_to_async(Business.objects.filter(user=user_ins).exists)()
+            print(f'is_business_exist {is_business_exist}')
+
+            if(is_business_exist):
+                 business_ins = await sync_to_async(Business.objects.get)(user=user_ins)
+                
+                 buss_queries = await LEAD_QUERY_TASK.GetLeadQueriesTask(business_ins=business_ins)
+                 print(f'queries {buss_queries}')
+                 if buss_queries:
+                    return LocalResponse(
+                        response=RESPONSE_MESSAGES.success,
+                        message=RESPONSE_MESSAGES.query_fetch_success,
+                        code=RESPONSE_CODES.success,
+                        data=buss_queries)
+
+                 else:
+                    return LocalResponse(
+                        response=RESPONSE_MESSAGES.error,
+                        message=RESPONSE_MESSAGES.query_fetch_error,
+                        code=RESPONSE_CODES.error,
+                        data={})
+
+        except Exception as e:
+            print(f'fetch quries error {e}')
+            return LocalResponse(
+                response=RESPONSE_MESSAGES.error,
+                message=RESPONSE_MESSAGES.query_fetch_error,
                 code=RESPONSE_CODES.error,
                 data={
                     'error': str(e)

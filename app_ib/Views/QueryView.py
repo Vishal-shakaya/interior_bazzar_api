@@ -94,11 +94,27 @@ async def GetQueryByID(request,id):
                 'error': str(e)
             })
 
-
-
-async def GetQueryBusinessIdView(request,id):
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+async def GetQueryBusinessView(request):
     try:
-        return JsonResponse({"result": 'success'})
+        user_ins= request.user 
+
+        # Call Auth Controller to Create User
+        final_response = await  asyncio.gather(LEAD_QUERY_CONTROLLER.GetBusinessQueries(user_ins=user_ins))
+        final_response = final_response[0]
+
+        return ServerResponse(
+            response=final_response.response,
+            code=final_response.code,
+            message=final_response.message,
+            data=final_response.data)
+
     except Exception as e:
-        print(f'{e}')
-        return JsonResponse({"result": 'error'})
+        return ServerResponse(
+            response=RESPONSE_MESSAGES.error,
+            message=RESPONSE_MESSAGES.query_fetch_error,
+            code=RESPONSE_CODES.error,
+            data={
+                'error': str(e)
+            })

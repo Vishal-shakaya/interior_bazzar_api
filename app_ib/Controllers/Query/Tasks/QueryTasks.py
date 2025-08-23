@@ -6,18 +6,6 @@ class LEAD_QUERY_TASK:
     @classmethod
     async def CreateLeadQueryTask(self, business_ins, data):
         try:
-            print(f'buss_id {data.name}')
-            print(f'buss_id {data.phone}')
-            print(f'buss_id {data.email}')
-            print(f'buss_id {data.interested}')
-            print(f'buss_id {data.query}')
-            print(f'buss_id {data.state}')
-            print(f'buss_id {data.country}')
-            print(f'buss_id {data.status}')
-            print(f'buss_id {data.tag}')
-            print(f'buss_id {data.priority}')
-            print(f'buss_id {data.remark}')
-
             lead_query_ins = LeadQuery()
             lead_query_ins.business= business_ins
             lead_query_ins.name= data.name
@@ -77,4 +65,32 @@ class LEAD_QUERY_TASK:
             
         except Exception as e:
             print(f'Error in CreateLeadQueryTask {e}')
+            return None
+
+
+    @classmethod
+    async def GetLeadQueriesTask(self, business_ins):
+        try:
+            query_data = []
+            async for lead_query in LeadQuery.objects.filter(business=business_ins):
+                print(f'lead {lead_query}')
+                data = {
+                    'name': lead_query.name,
+                    'phone': lead_query.phone,
+                    'email': lead_query.email,
+                    'interested': lead_query.interested,
+                    'query': lead_query.query,
+                    'state': lead_query.state,
+                    'country': lead_query.country,
+                    'status': lead_query.status,
+                    'tag': lead_query.tag,
+                    'priority': lead_query.priority,
+                    'remark': lead_query.remark,
+                }
+                query_data.append(data)
+
+            return query_data
+
+        except Exception as e:
+            print(f'Error in GetLeadQueryTask: {e}')
             return None
