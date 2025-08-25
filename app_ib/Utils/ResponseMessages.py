@@ -104,6 +104,27 @@ class RESPONSE_MESSAGES:
     query_assign_errror= 'Unable to assign query'
     query_assign_success= 'Query assigned successfully'
 
+    ############################################
+    #Query
+    ############################################
+    quate_generate_error= 'Unable to generate Quate'
+    Quate_generate_success= 'Quate generated successfully'
+
+    Quate_update_error= 'Unable to update Quate'
+    Quate_update_success= 'Quate update successfully'
+
+    Quate_remove_error= 'Unable to remove Quate'
+    Quate_remove_success= 'Quate deleted successfully'
+
+    Quate_fetch_error= 'Unable to fetch Quate'
+    Quate_fetch_success= 'Quate fetch successfully'
+
+    Quate_assign_errror= 'Unable to assign Quate'
+    Quate_assign_success= 'Quate assigned successfully'
+
+    Quate_verify_errror= 'Unable to verify Quate'
+    Quate_verify_success= 'Quate verify successfully'
+
 class VALIDATION_MESSAGES:
     password_length= 'Password must be at least 8 characters long'
     password_must_contain_digit= 'Password must contain at least one digit'

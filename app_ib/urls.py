@@ -10,6 +10,7 @@ from app_ib.Views.Business import BusinessView
 from app_ib.Views.Business import BusinessLocationView
 from app_ib.Views.Business import BusinessProfileView
 from app_ib.Views import SearchView
+from app_ib.Views import PlanQuateView
 
 
 app_name = 'interior_bazzar'
@@ -77,6 +78,12 @@ urlpatterns = [
     path('v-1/udpate-query-status', QueryView.UpdateQueryStatusView, name='UpdateQueryStatusView'),
     path('v-1/udpate-query-priority', QueryView.UpdateQueryPriorityView, name='UpdateQueryPriorityView'),
     path('v-1/udpate-query-remark', QueryView.UpdateQueryRemarkView, name='UpdateQueryPriorityView'),
+
+    #########################################################
+    # Quate: 
+    #########################################################
+    path('v-1/create-quate', PlanQuateView.CreateQuateView, name='CreateQuateView'),
+    path('v-1/verify-quate', PlanQuateView.VerifyQuateView, name='VerifyQuateView'),
 
   
     #########################################################

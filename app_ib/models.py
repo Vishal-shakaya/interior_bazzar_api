@@ -125,6 +125,7 @@ class BusinessPlan(models.Model):
     def __str__(self):
         return f'phone:{self.phone} query:{self.query}'
 
+# Platform own Plan buy query
 class PlanQuery(models.Model):
     user= models.ForeignKey(CustomUser,on_delete=models.CASCADE, null=True, blank=True)
     plan= models.CharField(max_length=500,default='')
@@ -138,18 +139,19 @@ class PlanQuery(models.Model):
 
     def __str__(self):
         return f'phone:{self.phone} stage:{self.stage}'
-
+        
+# Plan Buy Quate related to service
 class Quate(models.Model):
-    interested= models.CharField(max_length=500,default='')
-    note= models.CharField(max_length=500,default='')
     name= models.CharField(max_length=500,default='')
-    email= models.CharField(max_length=500,default='')
     phone= models.CharField(max_length=500,default='')
-    stage= models.CharField(max_length=500,default='') #{"1":"Lead","2":"Contacted","3":"Followed Up","4":"Closed"}
+    interested= models.CharField(max_length=500,default='')
+    email= models.CharField(max_length=500,default='')
+    note= models.CharField(max_length=500,default='')
+    stage= models.CharField(max_length=500,default='') #{"1":"Lead","2":"Contacted","3":"Followed Up","4":"Closed"} Admin
     timestamp= models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'phone:{self.phone} stage:{self.stage}'
+        return f'ID {self.pk} phone:{self.phone} stage:{self.stage}'
 
 
 class Feedback(models.Model):
