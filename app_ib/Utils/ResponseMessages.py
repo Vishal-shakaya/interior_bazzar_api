@@ -103,9 +103,28 @@ class RESPONSE_MESSAGES:
 
     query_assign_errror= 'Unable to assign query'
     query_assign_success= 'Query assigned successfully'
-
+ 
     ############################################
     #Query
+    ############################################
+    feedback_generate_error= 'Unable to generate feedback'
+    feedback_generate_success= 'feedback generated successfully'
+
+    feedback_update_error= 'Unable to update feedback'
+    feedback_update_success= 'feedback update successfully'
+
+    feedback_remove_error= 'Unable to remove feedback'
+    feedback_remove_success= 'feedback deleted successfully'
+
+    feedback_fetch_error= 'Unable to fetch feedback'
+    feedback_fetch_success= 'feedback fetch successfully'
+
+    feedback_assign_errror= 'Unable to assign feedback'
+    feedback_assign_success= 'feedback assigned successfully'
+
+
+    ############################################
+    #Quate
     ############################################
     quate_generate_error= 'Unable to generate Quate'
     Quate_generate_success= 'Quate generated successfully'

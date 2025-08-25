@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 from app_ib import views
 from rest_framework_simplejwt.views import (TokenRefreshView)
-from app_ib.Views import AuthView, QueryView, Feedback
+from app_ib.Views import AuthView, QueryView, FeedbackView
 from app_ib.Views import ProfileView
 from app_ib.Views.Business import BusinessView
 from app_ib.Views.Business import BusinessLocationView
@@ -89,7 +89,8 @@ urlpatterns = [
     #########################################################
     # Feedback: 
     #########################################################
-    path('v-1/create-feedback', Feedback.CreateFeedbackView, name='CreateFeedbackView'),
+    path('v-1/create-feedback', FeedbackView.CreateFeedbackView, name='CreateFeedbackView'),
+    path('v-1/update-feedback-status', FeedbackView.UpdateFeedbackStatusView, name='UpdateFeedbackStatusView'),
  
     #########################################################
     # Serachview: 
