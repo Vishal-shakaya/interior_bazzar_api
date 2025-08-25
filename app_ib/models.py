@@ -106,7 +106,7 @@ class LeadQuery(models.Model):
     timestamp= models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'business_id {self.business.pk}  name: {self.name}  phone{self.phone} date {self.timestamp}'
+        return f'business_id {self.pk}  name: {self.name}  phone{self.phone} date {self.timestamp}'
 
 
 class BusinessPlan(models.Model):

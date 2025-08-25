@@ -103,6 +103,24 @@ class RESPONSE_MESSAGES:
 
     query_assign_errror= 'Unable to assign query'
     query_assign_success= 'Query assigned successfully'
+
+    ############################################
+    #Query
+    ############################################
+    ads_query_generate_error= 'Unable to generate ads query'
+    ads_query_generate_success= 'ads_query generated successfully'
+
+    ads_query_update_error= 'Unable to update ads_query'
+    ads_query_update_success= 'ads query update successfully'
+
+    ads_query_remove_error= 'Unable to remove ads query'
+    ads_query_remove_success= 'ads query deleted successfully'
+
+    ads_query_fetch_error= 'Unable to fetch ads query'
+    ads_query_fetch_success= 'ads query fetch successfully'
+
+    ads_query_assign_errror= 'Unable to assign ads query'
+    ads_query_assign_success= 'ads query assigned successfully'
  
     ############################################
     #Query

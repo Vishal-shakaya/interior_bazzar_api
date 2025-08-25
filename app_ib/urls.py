@@ -11,6 +11,7 @@ from app_ib.Views.Business import BusinessLocationView
 from app_ib.Views.Business import BusinessProfileView
 from app_ib.Views import SearchView
 from app_ib.Views import PlanQuateView
+from app_ib.Views import AdsQueryView
 
 
 app_name = 'interior_bazzar'
@@ -84,6 +85,12 @@ urlpatterns = [
     #########################################################
     path('v-1/create-quate', PlanQuateView.CreateQuateView, name='CreateQuateView'),
     path('v-1/verify-quate', PlanQuateView.VerifyQuateView, name='VerifyQuateView'),
+
+    #########################################################
+    # Ads Query: 
+    #########################################################
+    path('v-1/create-ads-query', AdsQueryView.CreateAdsQueryView, name='CreateAdsQueryView'),
+    path('v-1/verify-ads-query', AdsQueryView.VerifyAdsQueryView, name='VerifyAdsQueryView'),
 
   
     #########################################################
