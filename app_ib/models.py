@@ -76,7 +76,7 @@ class BusinessProfile(models.Model):
     def __str__(self):
         return f'business profile{self.business.pk}'
     
-class BusinessLocation(models.Model):
+class Location(models.Model):
     business= models.ForeignKey(Business,on_delete=models.CASCADE, null=True, blank=True)
     pin_code= models.CharField(max_length=500)
     city= models.CharField(max_length=500)

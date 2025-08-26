@@ -8,7 +8,7 @@ from app_ib.Controllers.Business.Tasks.BusinessTasks import BUSS_TASK
 from app_ib.Utils.ResponseMessages import RESPONSE_MESSAGES
 from app_ib.Utils.ResponseCodes import RESPONSE_CODES
 from app_ib.Utils.LocalResponse import LocalResponse
-from app_ib.models import BusinessLocation, Business
+from app_ib.models import Location, Business
 from app_ib.Controllers.BussLocation.Tasks.BusinessLocationTasks import BUSS_LOC_TASK
 
 
@@ -27,11 +27,11 @@ class BUSS_LOCATION_CONTROLLER:
                  business_ins = await sync_to_async(Business.objects.get)(user=user_ins)
 
             # Check if business already exist
-            is_business_loc_exist = await sync_to_async(BusinessLocation.objects.filter(business=business_ins).exists)()
+            is_business_loc_exist = await sync_to_async(Location.objects.filter(business=business_ins).exists)()
             print(f'is_business_loc_exist {is_business_loc_exist}')
 
             if is_business_loc_exist:
-                business_loc_ins = await sync_to_async(BusinessLocation.objects.get)(business=business_ins)
+                business_loc_ins = await sync_to_async(Location.objects.get)(business=business_ins)
                 print(f'update business location')
                 update_resp = await BUSS_LOC_TASK.UpdateBusinessLocTask(
                     business_loc_ins=business_loc_ins, data=data)
@@ -86,10 +86,10 @@ class BUSS_LOCATION_CONTROLLER:
                  business_ins = await sync_to_async(Business.objects.get)(pk=id)
 
             # Check if business already exist
-            is_business_loc_exist = await sync_to_async(BusinessLocation.objects.filter(business=business_ins).exists)()
+            is_business_loc_exist = await sync_to_async(Location.objects.filter(business=business_ins).exists)()
 
             if is_business_loc_exist:
-                business_loc_ins = await sync_to_async(BusinessLocation.objects.get)(business=business_ins)
+                business_loc_ins = await sync_to_async(Location.objects.get)(business=business_ins)
 
                 update_resp = await BUSS_LOC_TASK.GetBusinessLocTask(
                     business_loc_ins=business_loc_ins)

@@ -3,14 +3,14 @@ from asgiref.sync import sync_to_async
 from app_ib.Utils.ResponseMessages import RESPONSE_MESSAGES
 from app_ib.Utils.ResponseCodes import RESPONSE_CODES
 from app_ib.Utils.LocalResponse import LocalResponse
-from app_ib.models import BusinessLocation, Business
+from app_ib.models import Location, Business
 
 class BUSS_LOC_TASK:
 
     @classmethod
     async def CreateBusinessLocTask(self, business_ins, data):
         try:
-            business_loc_ins = BusinessLocation()
+            business_loc_ins = Location()
             business_loc_ins.business=business_ins
             business_loc_ins.pin_code=data.pin_code
             business_loc_ins.city=data.city
