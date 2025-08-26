@@ -7,7 +7,7 @@ from app_ib.Utils.LocalResponse import LocalResponse
 from app_ib.Utils.ResponseMessages import RESPONSE_MESSAGES
 from app_ib.Utils.ResponseCodes import RESPONSE_CODES
 from app_ib.Utils.LocalResponse import LocalResponse
-from app_ib.models import Quate
+from app_ib.models import PlanQuery
 from app_ib.Controllers.Plans.Tasks.PlanTasks import PLAN_TASKS
 
 
@@ -42,47 +42,42 @@ class PLAN_CONTROLLER:
                     'error': str(e)
                 })
 
+
     @classmethod
-    async def VerifyQuate(self,data):
+    async def VerifyPlan(self,data):
         try:
-            # Test Data
-            # print(f'name: {data.phone}')
-            # print(f'name: {data.interested}')
-            # print(f'name: {data.email}')
-            # print(f'name: {data.note}')
+            is_plan_exist= await sync_to_async(PlanQuery.objects.filter(id=data.id).exists)()
+            if(is_plan_exist):
+                plan_ins=await sync_to_async(PlanQuery.objects.get)(id=data.id)
+                print(f'plan ins {plan_ins}')
 
-            is_quate_exist= await sync_to_async(Quate.objects.filter(id=data.id).exists)()
-            if(is_quate_exist):
-                quate_ins=await sync_to_async(Quate.objects.get)(id=data.id)
-                print(f'quate ins {quate_ins}')
+                verify_plan_response = await  PLAN_TASKS.VerifyPlanTask(plan_ins=plan_ins)
+                print(f'verift plan resp {verify_plan_response}')
 
-                verify_quate_response = await  PLAN_QUATE_TASKS.VerifyQuateTask(quate_ins=quate_ins, data=data)
-                print(f'veruft quate resp {verify_quate_response}')
-
-                if verify_quate_response:
+                if verify_plan_response:
                     return LocalResponse(
                         response=RESPONSE_MESSAGES.success,
-                        message=RESPONSE_MESSAGES.Quate_verify_success,
+                        message=RESPONSE_MESSAGES.plan_verify_success,
                         code=RESPONSE_CODES.success,
                         data={})
 
                 else:
                     return LocalResponse(
                         response=RESPONSE_MESSAGES.error,
-                        message=RESPONSE_MESSAGES.Quate_verify_errror,
+                        message=RESPONSE_MESSAGES.plan_verify_errror,
                         code=RESPONSE_CODES.error,
                         data={})
             else:
                 return LocalResponse(
                     response=RESPONSE_MESSAGES.error,
-                    message=RESPONSE_MESSAGES.Quate_verify_errror,
+                    message=RESPONSE_MESSAGES.plan_verify_errror,
                     code=RESPONSE_CODES.error,
                     data={})
 
         except Exception as e:
             return LocalResponse(
                 response=RESPONSE_MESSAGES.error,
-                message=RESPONSE_MESSAGES.Quate_verify_errror,
+                message=RESPONSE_MESSAGES.plan_verify_errror,
                 code=RESPONSE_CODES.error,
                 data={
                     'error': str(e)

@@ -104,7 +104,7 @@ urlpatterns = [
     # Plan: 
     #########################################################
     path('v-1/create-plan',  PlanView.CreatePlanView, name='CreatePlanView'),
-    path('v-1/update-plan', PlanView.UpdatePlanView, name='UpdatePlanView'),
+    path('v-1/verify-plan', PlanView.VerifyPaymentView, name='VerifyPaymentView'),
  
     #########################################################
     # Serachview: 

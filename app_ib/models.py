@@ -141,7 +141,7 @@ class PlanQuery(models.Model):
     timestamp= models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'phone:{self.phone} stage:{self.stage}'
+        return f' ID {self.pk} phone:{self.phone} stage:{self.stage}'
         
 # Plan Buy Quate related to service
 class Quate(models.Model):

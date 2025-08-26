@@ -54,24 +54,19 @@ class PLAN_TASKS:
                 await sync_to_async(plan_query.save)()
                 return True
 
-
-            
         except Exception as e:
             print(f'Error in CreatePlanTask {e}')
             return None
 
 
     @classmethod
-    async def VerifyQuateTask(self, quate_ins, data):
+    async def VerifyPlanTask(self, plan_ins):
         try:
-            quate_ins.phone= data.phone
-            quate_ins.interested= data.interested     
-            quate_ins.email= data.email
-            quate_ins.note= data.note
-            await sync_to_async(quate_ins.save)()
-            # print(f'quate instance pk {quate_ins.pk}')
+            print(f'Task {plan_ins}')
+            plan_ins.stage= 'confirm'
+            await sync_to_async(plan_ins.save)()
             return True
             
         except Exception as e:
-            print(f'Error in VerifyQuateTask {e}')
+            print(f'Error in VerifyPlanTask {e}')
             return None
