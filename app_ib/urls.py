@@ -11,6 +11,7 @@ from app_ib.Views.Business import BusinessLocationView
 from app_ib.Views.Business import BusinessProfileView
 from app_ib.Views import SearchView
 from app_ib.Views import PlanQuateView
+from app_ib.Views import PlanView
 from app_ib.Views import AdsQueryView
 
 
@@ -98,6 +99,12 @@ urlpatterns = [
     #########################################################
     path('v-1/create-feedback', FeedbackView.CreateFeedbackView, name='CreateFeedbackView'),
     path('v-1/update-feedback-status', FeedbackView.UpdateFeedbackStatusView, name='UpdateFeedbackStatusView'),
+
+    #########################################################
+    # Plan: 
+    #########################################################
+    path('v-1/create-plan',  PlanView.CreatePlanView, name='CreatePlanView'),
+    path('v-1/update-plan', PlanView.UpdatePlanView, name='UpdatePlanView'),
  
     #########################################################
     # Serachview: 

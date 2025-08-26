@@ -132,6 +132,9 @@ class PlanQuery(models.Model):
     name= models.CharField(max_length=500,default='')
     email= models.CharField(max_length=500,default='')
     phone= models.CharField(max_length=500,default='')
+    state= models.CharField(max_length=500,default='')
+    country= models.CharField(max_length=500,default='')
+    address= models.TextField(default='')
     transaction_id= models.CharField(max_length=500,default='')
     stage= models.CharField(max_length=500,default='') #{"1":"Lead","2":"Contacted","3":"Followed Up","4":"Closed"}
     attachment= models.FileField(null=True, blank=True, upload_to='lead_query/attachment')

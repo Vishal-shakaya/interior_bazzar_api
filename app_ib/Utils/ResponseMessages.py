@@ -162,6 +162,28 @@ class RESPONSE_MESSAGES:
     Quate_verify_errror= 'Unable to verify Quate'
     Quate_verify_success= 'Quate verify successfully'
 
+
+    ############################################
+    # Plans
+    ############################################
+    plan_create_error= 'Unable to create plan'
+    plan_create_success= 'plan created successfully'
+
+    plan_update_error= 'Unable to update plan'
+    plan_update_success= 'plan update successfully'
+
+    plan_remove_error= 'Unable to remove plan'
+    plan_remove_success= 'plan deleted successfully'
+
+    plan_fetch_error= 'Unable to fetch plan'
+    plan_fetch_success= 'plan fetch successfully'
+
+    plan_assign_errror= 'Unable to assign plan'
+    plan_assign_success= 'plan assigned successfully'
+
+    plan_verify_errror= 'Unable to verify plan'
+    plan_verify_success= 'plan verify successfully'
+
 class VALIDATION_MESSAGES:
     password_length= 'Password must be at least 8 characters long'
     password_must_contain_digit= 'Password must contain at least one digit'
