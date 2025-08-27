@@ -3,6 +3,7 @@ from django.contrib import admin
 # Register your models here.
 from app_ib import models
 
+admin.site.register(models.Contact)
 admin.site.register(models.CustomUser)
 admin.site.register(models.UserProfile)
 admin.site.register(models.Business)
