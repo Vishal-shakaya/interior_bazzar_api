@@ -169,12 +169,23 @@ class Feedback(models.Model):
 
 
 class Subscription(models.Model):
-    detail= models.TextField()
+    type= models.CharField(max_length=800) #listing or #Filter
+    title= models.CharField(max_length=800) 
+    subtitle= models.CharField(max_length=800) 
     services= models.TextField()
+    cover_image= models.FileField(null=True, blank=True, upload_to='subscription/attachment')
+    youtube_link= models.TextField()
+    duration= models.CharField(max_length=800) 
+    tag= models.CharField(max_length=800) 
+    amount= models.CharField(max_length=800) 
+    discount_percentage= models.CharField(max_length=800) 
+    discount_amount= models.CharField(max_length=800) 
+    payable_amount= models.CharField(max_length=800) 
+    plan_pdf= models.FileField(null=True, blank=True, upload_to='subscription/pdf')
     is_active= models.BooleanField(default=False)
     timestamp= models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return f'review:{self.review} rating:{self.rating}'
+        return f'ID:{self.id} rating:{self.title}'
 
 class Blog(models.Model):
     user= models.ForeignKey(CustomUser,on_delete=models.CASCADE, null=True, blank=True)
