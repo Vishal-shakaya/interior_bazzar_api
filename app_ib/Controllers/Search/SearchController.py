@@ -8,7 +8,11 @@ from django.http import JsonResponse
 from app_ib.Utils.ServerResponse import ServerResponse
 from app_ib.Utils.ResponseMessages import RESPONSE_MESSAGES
 from app_ib.Utils.ResponseCodes import RESPONSE_CODES
+<<<<<<< HEAD
 from app_ib.models import Business, BusinessProfile, UserProfile
+=======
+from app_ib.models import Business, Location, BusinessProfile, UserProfile
+>>>>>>> origin/changes
 from app_ib.Controllers.BusinessProfile.Tasks.BusinessProfileTasks import BUSS_PROF_TASK
 from app_ib.Controllers.Profile.Tasks.Taskys import PROFILE_TASKS
 from app_ib.Controllers.Business.Tasks.BusinessTasks import BUSS_TASK
