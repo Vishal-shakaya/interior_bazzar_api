@@ -169,18 +169,18 @@ class Feedback(models.Model):
 
 
 class Subscription(models.Model):
-    type= models.CharField(max_length=800) #listing or #Filter
-    title= models.CharField(max_length=800) 
-    subtitle= models.CharField(max_length=800) 
+    type= models.CharField(max_length=800,null=True, blank=True) #listing or #Filter
+    title= models.CharField(max_length=800,null=True, blank=True) 
+    subtitle= models.CharField(max_length=800,null=True, blank=True) 
     services= models.TextField()
     cover_image= models.FileField(null=True, blank=True, upload_to='subscription/attachment')
-    youtube_link= models.TextField()
-    duration= models.CharField(max_length=800) 
-    tag= models.CharField(max_length=800) 
-    amount= models.CharField(max_length=800) 
-    discount_percentage= models.CharField(max_length=800) 
-    discount_amount= models.CharField(max_length=800) 
-    payable_amount= models.CharField(max_length=800) 
+    video= models.FileField(null=True, blank=True, upload_to='subscription/video')
+    duration= models.CharField(max_length=800,null=True, blank=True) 
+    tag= models.CharField(max_length=800,null=True, blank=True) 
+    amount= models.CharField(max_length=800,null=True, blank=True) 
+    discount_percentage= models.CharField(max_length=800,null=True, blank=True) 
+    discount_amount= models.CharField(max_length=800,null=True, blank=True) 
+    payable_amount= models.CharField(max_length=800,null=True, blank=True) 
     plan_pdf= models.FileField(null=True, blank=True, upload_to='subscription/pdf')
     is_active= models.BooleanField(default=False)
     timestamp= models.DateTimeField(auto_now_add=True)
@@ -197,6 +197,20 @@ class Blog(models.Model):
 
     def __str__(self):
         return f'author {self.author} title:{self.title} timestamp:{self.timestamp}'
+
+class Contact(models.Model):
+    tag= models.TextField()
+    name= models.CharField(max_length=800,null=True, blank=True) 
+    phone= models.CharField(max_length=800,null=True, blank=True) 
+    mail= models.CharField(max_length=800,null=True, blank=True) 
+    company= models.CharField(max_length=800,null=True, blank=True) 
+    recognisation= models.CharField(max_length=800,null=True, blank=True) 
+    detail= models.TextField()
+    attachment= models.FileField(null=True, blank=True,upload_to='contact/attachment')
+    timestamp= models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'ID {self.pk} tag {self.tag}'
 
 class Constants(models.Model):
     segments= models.TextField() # {'manu':Manugraturer, 'retailer':Retailer}
