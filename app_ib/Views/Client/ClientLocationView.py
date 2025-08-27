@@ -39,12 +39,12 @@ async def CreateOrUpdateClientLocationView(request):
                 'error': str(e)
             })
 
+
 @api_view(['GET'])
-async def GetclientLocationByBussIDView(request,user_ins):
+async def GetClientLocationByIDView(request,id):
     try:
         # Call Auth Controller to Create User
-        final_response = await  asyncio.gather(
-            CLIENT_LOCATION_CONTROLLER.GetClientLocByUserIns(user_ins=user_ins))
+        final_response = await  asyncio.gather(CLIENT_LOCATION_CONTROLLER.GetClientLocByUserIns(id=id))
         
         print(f'final_response {final_response}')
         final_response = final_response[0]

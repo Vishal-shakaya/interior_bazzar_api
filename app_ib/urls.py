@@ -13,6 +13,7 @@ from app_ib.Views import SearchView
 from app_ib.Views import PlanQuateView
 from app_ib.Views import PlanView
 from app_ib.Views import AdsQueryView
+from app_ib.Views.Client import ClientLocationView, ClientsView
 
 
 app_name = 'interior_bazzar'
@@ -35,7 +36,7 @@ urlpatterns = [
     path('v-1/reset-password', AuthView.ResetPasswordView, name='ResetPasswordView'),
     
     #########################################################
-    # Tokem: 
+    # Token: 
     #########################################################
     path('v-1/get-refresh-token', TokenRefreshView.as_view(), name='token-refresh'),
 
@@ -45,6 +46,12 @@ urlpatterns = [
     path('v-1/create-profile', ProfileView.CreateProfileView, name='CreateProfileView'),
     path('v-1/create-update-profile-image', ProfileView.CreateOrUpdateProfileImageView, name='CreateOrUpdateProfileImageView'),
     path('v-1/get-profile', ProfileView.GetProfileView, name='GetProfileView'),
+
+    #########################################################
+    # Client Location: 
+    #########################################################
+    path('v-1/create-update-client-location', ClientLocationView.CreateOrUpdateClientLocationView, name='CreateOrUpdateClientLocationView'),
+    path('v-1/get-client-location-by-id/<int:id>', ClientLocationView.GetClientLocationByIDView, name='GetClientLocationByIDView'),
 
     #########################################################
     # Business: 

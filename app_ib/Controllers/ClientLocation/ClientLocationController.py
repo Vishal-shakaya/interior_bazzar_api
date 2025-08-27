@@ -8,7 +8,7 @@ from app_ib.Controllers.Business.Tasks.BusinessTasks import BUSS_TASK
 from app_ib.Utils.ResponseMessages import RESPONSE_MESSAGES
 from app_ib.Utils.ResponseCodes import RESPONSE_CODES
 from app_ib.Utils.LocalResponse import LocalResponse
-from app_ib.models import Location, Business
+from app_ib.models import Location
 from app_ib.Controllers.ClientLocation.Tasks.ClientLocationTasks import CLIENT_LOC_TASKS
 
 
@@ -17,6 +17,7 @@ class CLIENT_LOCATION_CONTROLLER:
     @classmethod
     async def CreateOrUpdateClientLocation(self, user_ins, data):
         try:
+            is_client_loc_exist = await sync_to_async(Location.objects.filter(user=user_ins).exists)()
             if is_client_loc_exist:
                 client_loc_ins = await sync_to_async(Location.objects.get)(user=user_ins)
                 print(f'update location')
@@ -66,13 +67,13 @@ class CLIENT_LOCATION_CONTROLLER:
 
 
     @classmethod
-    async def GetClientLocByUserIns(self,user_ins):
+    async def GetClientLocByUserIns(self,id):
         try:
 
-            is_client_loc_exist = await sync_to_async(Location.objects.filter(user=user_ins).exists)()
+            is_client_loc_exist = await sync_to_async(Location.objects.filter(pk=id).exists)()
 
             if is_client_loc_exist:
-                client_loc_ins = await sync_to_async(Location.objects.get)(user=user_ins)
+                client_loc_ins = await sync_to_async(Location.objects.get)(pk=id)
 
                 update_resp = await CLIENT_LOC_TASKS.GetClientLocTask(
                     client_loc_ins=client_loc_ins)

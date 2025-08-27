@@ -11,7 +11,7 @@ from django.http import JsonResponse
 from app_ib.Utils.ServerResponse import ServerResponse
 from app_ib.Utils.ResponseMessages import RESPONSE_MESSAGES
 from app_ib.Utils.ResponseCodes import RESPONSE_CODES
-from app_ib.models import Business, BusinessLocation, BusinessProfile, UserProfile
+from app_ib.models import Business, Location, BusinessProfile, UserProfile
 from app_ib.Controllers.BusinessProfile.Tasks.BusinessProfileTasks import BUSS_PROF_TASK
 from app_ib.Controllers.Profile.Tasks.Taskys import PROFILE_TASKS
 from app_ib.Controllers.Business.Tasks.BusinessTasks import BUSS_TASK
@@ -110,11 +110,11 @@ class SEARCH_TASKS:
                 final_data['business_profile']=business_profile_data
 
             # 4. Business Location
-            is_business_location_exist= await sync_to_async(BusinessLocation.objects.filter(business=business).exists)()
+            is_business_location_exist= await sync_to_async(Location.objects.filter(business=business).exists)()
             print(f'is_business_location_exist {is_business_location_exist}')
             
             if(is_business_location_exist):
-                business_loc_ins= await sync_to_async(BusinessLocation.objects.get)(business=business)
+                business_loc_ins= await sync_to_async(Location.objects.get)(business=business)
                 business_location_data= await BUSS_LOC_TASK.GetBusinessLocTask(business_loc_ins=business_loc_ins)
                 print(f'business location data {business_location_data}')
                 final_data['business_location']=business_location_data
