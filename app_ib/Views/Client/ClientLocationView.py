@@ -16,7 +16,7 @@ async def CreateOrUpdateClientLocationView(request):
         # Convert request.data to dot notation object
         data = MY_METHODS.json_to_object(request.data)
         user_ins = request.user
-
+        print(f'user_ins {user_ins}')
         # Call Auth Controller to Create User
         final_response = await  asyncio.gather(
             CLIENT_LOCATION_CONTROLLER.CreateOrUpdateClientLocation(user_ins=user_ins, data=data))

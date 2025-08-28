@@ -1,3 +1,4 @@
+from asgiref.sync import sync_to_async
 from app_ib.models import Location, Business
 
 class CLIENT_LOC_TASKS:
@@ -6,7 +7,7 @@ class CLIENT_LOC_TASKS:
     async def CreateClientLocTask(self, user_ins, data):
         try:
             client_loc_ins = Location()
-            client_loc_ins.business=user_ins
+            client_loc_ins.user=user_ins
             client_loc_ins.pin_code=data.pin_code
             client_loc_ins.city=data.city
             client_loc_ins.state=data.state

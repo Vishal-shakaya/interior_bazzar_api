@@ -77,6 +77,7 @@ class BusinessProfile(models.Model):
         return f'business profile{self.business.pk}'
     
 class Location(models.Model):
+    user= models.ForeignKey(CustomUser,on_delete=models.CASCADE, null=True, blank=True)
     business= models.ForeignKey(Business,on_delete=models.CASCADE, null=True, blank=True)
     pin_code= models.CharField(max_length=500)
     city= models.CharField(max_length=500)
